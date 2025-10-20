@@ -1,9 +1,9 @@
 <?php
 
 $databaseHost = 'localhost';
-$databaseUsername = 'pope';
-$databasePassword = 'pope';
-$databaseName = 'pope';
+$databaseUsername = 'papst';
+$databasePassword = 'johannespaul';
+$databaseName = 'papst';
 
 // Connect to the database
 $mysqli = mysqli_connect($databaseHost, $databaseUsername, $databasePassword, $databaseName); 
