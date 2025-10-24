@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+<meta http-equiv="content-type" content="text/html; charset=utf-8">
+<meta http-equiv="cache-control" content="no-store">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<title>Useless Papst &middot; Teekränzchen</title>
+
+<meta http-equiv="Content-Script-Type" content="text/javascript">
+<link rel="stylesheet" type="text/css" href="framework/w3.css">
+<link rel="stylesheet" type="text/css" href="framework/style_2025-03-13.css">
+<script src="framework/jquery-3.6.2.min.js"></script>
+<script src="framework/party-2.2.0.min.js"></script>
+
+<meta name="robots" content="index, follow">
+<meta name="author" content="Phil Hoffer - rotane">
+<meta name="keywords" lang="de" content="Teekränzchen, LAN Parties, der Papst">
+<meta name="description" lang="de" content="Website des Teekränzchens.">
+
+<link rel="shortcut icon" href="favicon.ico">
+<link rel="icon" href="favicon.ico" type="image/x-icon">
+</head>
+
+<body lang="de" id="papst">
+
+<!-- main container -->
+<div class="w3-content w3-container" id="tk">
+
+<!-- Content -->
+
+<main>
+  
+  <h1>Useless Papst</h1>
+
+  <h2>actions</h2>
+  
+    <div id="actions" class="grid">
+  
+      <button class="party"><span>“Hallelujah!”</span></button>
+      <button class="party"><span>Weißer Rauch</span></button>
+      <button class="party"><span>Regenbogen</span></button>
+      <button class="party"><span>Test</span></button>
+      <button class="party"><span>Test</span></button>
+      <button class="party"><span>Test</span></button>
+      <button class="party"><span>Test</span></button>
+      <button class="party"><span>Test</span></button>
+  
+    </div>
+  
+  <h2>testfarben</h2>
+  
+   <div id="test" class="grid">
+  
+  <button class="test"><span>1</span></button>
+  <button class="test"><span>2</span></button>
+  <button class="test"><span>3</span></button>
+  <button class="test"><span>4</span></button>
+  <button class="test"><span>5</span></button>
+  <button class="test"><span>6</span></button>
+ 
+ </div>
+
+</div> <!-- main container #tk -->
+
+
+
+
+
+
+<script>
+
+// party
+$(".party").click(function() {
+    party.sparkles(this, {
+        count: party.variation.range(15, 25),
+	speed: party.variation.range(240, 270),
+	size: party.variation.range(0.5, 1.2),
+	lifetime: party.variation.range(0.3, 1.45),
+    });
+});
+
+
+
+// open modal + add browser history-forward state
+function openmodal(modalId) {
+  $(modalId).addClass('modal-visible');
+  window.history.pushState({ isPopup: true }, "modal");
+}
+
+// close any open modal + stop any audio + rewind it to the beginning
+function hidemodal() {
+  $('.modal').removeClass('modal-visible');
+  $('audio').each(function() {
+    this.pause();
+    this.currentTime = 0;
+  });
+}
+
+// to close a modal, call this function
+// it actually sends a browser history-back state (see last function)
+// via https://stackoverflow.com/questions/69706014
+function closemodal() {
+  window.history.back();
+}
+
+// script to close a modal when clicked outside of it
+// is also sends a browser history-back state (see above)
+window.onclick = function(event) {
+  if (event.target.classList.contains("modal")) {
+    window.history.back();
+  }
+}
+
+// on browser history-back, call funtion "hidemodal" that closes any open modal
+window.addEventListener('popstate', event => {
+  if (event.state?.isPopup) {
+    hidemodal();
+  }
+});
+
+</script>
+
+</body>
+
+</html>
