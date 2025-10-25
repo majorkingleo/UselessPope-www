@@ -2,21 +2,19 @@
 
 /* === fonts === */
 
-@font-face
-{
- font-family: 'Roboto Mono';
- font-style: normal;
- font-weight: 400;
- src: url('roboto-mono-v22-latin-400.woff2') format('woff2'),
+@font-face {
+    font-family: 'Roboto Mono';
+    font-style: normal;
+    font-weight: 400;
+    src: url('roboto-mono-v22-latin-400.woff2') format('woff2'),
       url('roboto-mono-v22-latin-400.woff') format('woff');
 }
 
-@font-face
-{
- font-family: 'Roboto Mono';
- font-style: normal;
- font-weight: 600;
- src: url('roboto-mono-v22-latin-600.woff2') format('woff2'),
+@font-face {
+    font-family: 'Roboto Mono';
+    font-style: normal;
+    font-weight: 600;
+    src: url('roboto-mono-v22-latin-600.woff2') format('woff2'),
       url('roboto-mono-v22-latin-600.woff') format('woff');
 }
 
@@ -24,8 +22,7 @@
 
 /* === variables  === */
 
-:root
-{
+:root {
  --backgroundbody:     #080808; 
  --backgroundcontent:  #252525; 
  --backgroundtext:     rgba(250,250,250,0.06); 
@@ -39,31 +36,32 @@
 
 /* === reset === */
 
-html, body
-{
- margin: 0;
- padding: 0;
+html, body {
+    margin: 0;
+    padding: 0;
 }
 
-html
-{
- box-sizing: border-box;
- scrollbar-color: #777 #3c3c3c;
- scrollbar-width: thin;
+html {
+    box-sizing: border-box;
+    scrollbar-color: #777 #3c3c3c;
+    scrollbar-width: thin;
 }
 
 *,
 *::before,
-*::after
-{
- box-sizing: inherit;
+*::after {
+    box-sizing: inherit;
 }
 
 
 
 /* general formatting */
 
-html,body,p,a,li,h1,h2,h3,h4,h5,h6 { font-family: "Roboto Mono", "Courier New"; font-weight: 400; color: var(--text); }
+html,body,p,a,li,h1,h2,h3,h4,h5,h6 {
+    font-family: "Roboto Mono", "Courier New";
+    font-weight: 400;
+    color: var(--text);
+}
 
 
 
@@ -81,48 +79,40 @@ h6 { font-size: 19px !important; font-weight: 600; }
 
 /* text */
 
-p
-{
- margin: 0 0 12px;
+p {
+    margin: 0 0 12px;
 }
 
-p, li
-{
- hyphens: auto;
- -moz-hyphens: auto;
- -webkit-hyphens: auto; 
+p, li {
+    hyphens: auto;
+    -moz-hyphens: auto;
+    -webkit-hyphens: auto; 
 }
 
-p, a, li, li a, td
-{
- font-size: 16px;
- line-height: 1.6em; 
+p, a, li, li a, td {
+    font-size: 16px;
+    line-height: 1.6em; 
 }
 
-a
-{
- text-decoration: underline;
+a {
+    text-decoration: underline;
 }
 
-a:hover
-{
- text-decoration: none;
- color: inherit;
+a:hover {
+    text-decoration: none;
+    color: inherit;
 }
 
-small
-{
- font-size: 70%;
+small {
+    font-size: 70%;
 }
 
-small a
-{
- font-size: inherit;
+small a {
+    font-size: inherit;
 }
 
-small a:hover 
-{
- color: inherit;
+small a:hover {
+    color: inherit;
 }
 
 
@@ -132,44 +122,39 @@ small a:hover
 /* animated background */
 /* via https://codepen.io/jlengstorf/pen/WNPGMJo */
 
-body
-{
- background: var(--backgroundbody);
+body {
+    background: var(--backgroundbody);
 }
 
-#tk
-{
- position: relative;
- margin-top: 100px;
- margin-bottom: 100px;
- padding: 32px 64px 48px;
- background: var(--backgroundcontent);
- color: var(--text);
- border-radius: 25px;
+#tk {
+    position: relative;
+    margin-top: 100px;
+    margin-bottom: 100px;
+    padding: 32px 64px 48px;
+    background: var(--backgroundcontent);
+    color: var(--text);
+    border-radius: 25px;
 }
 
 #tk::before,
-#tk::after
-{
- content: "";
- position: absolute;
- top: -3px;
- left: -3px;
- background: conic-gradient(
+#tk::after {
+    content: "";
+    position: absolute;
+    top: -3px;
+    left: -3px;
+    background: conic-gradient(
       from var(--bg-angle) at 50% 50%,  
       red, magenta, orange, yellow, green, blue, red
-      )
-      border-box;
- width: calc(100% + 6px);
- height: calc(100% + 6px);
- z-index: -1;
- animation: spin 10s infinite linear;
- border-radius: 26px;
+      ) border-box;
+      width: calc(100% + 6px);
+      height: calc(100% + 6px);
+      z-index: -1;
+      animation: spin 10s infinite linear;
+      border-radius: 26px;
 }
 
-#tk::after
-{
- filter: blur(55px);
+#tk::after {
+    filter: blur(55px);
 }
 
 @property --bg-angle
@@ -189,26 +174,25 @@ body
 
 /* animated h1 and lines under h2 */
 
-h1
-{
- background: linear-gradient(to right, #0099ff, #ffff00, #ff3399, #0099ff);
- -webkit-background-clip: text;
- background-clip: text;
- color: transparent;
- animation: rainbow_animation 2.1s linear infinite;
- background-size: 200% auto;
+h1 {
+    background: linear-gradient(to right, #0099ff, #ffff00, #ff3399, #0099ff);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    animation: rainbow_animation 2.1s linear infinite;
+    background-size: 200% auto;
 }
 
 h2::after {
- content:"";
- width: 100%;
- height: 1px;
- display: block;
- position: relative;
- top: 8px;
- background: linear-gradient(to right, #272727, #ffff00, #ff3355, #272727, #272727);
- animation: rainbow_animation 3.9s linear infinite;
- background-size: 200% auto;
+    content:"";
+    width: 100%;
+    height: 1px;
+    display: block;
+    position: relative;
+    top: 8px;
+    background: linear-gradient(to right, #272727, #ffff00, #ff3355, #272727, #272727);
+    animation: rainbow_animation 3.9s linear infinite;
+    background-size: 200% auto;
 }
 
 @keyframes rainbow_animation
@@ -309,6 +293,12 @@ button:hover::after {
     }
 }
 
+button.audio span::before {
+    content:"\25B6";
+    padding-right: 6px;
+    font-size: 75%;
+}
+
 
 
 /* stats */
@@ -340,11 +330,11 @@ button:hover::after {
 
     @media screen and (max-width: 666px) {
       .column {
-        width: 100%!important;
+          width: 100%!important;
       }
       .column:nth-child(2) {
-        margin-bottom: 10px;
-    }
+          margin-bottom: 10px;
+      }
     }
 
 
@@ -367,9 +357,9 @@ button:hover::after {
 }
 
 @keyframes blinker {
- 50% {
-    opacity: 20%;
- }
+    50% {
+        opacity: 20%;
+    }
 }
 
 /* event log */
@@ -380,12 +370,12 @@ iframe {
     width:100%; 
     padding: 0;
     background-color: var(--backgroundtext);
-    border-radius: 4px;
+    border-radius: var(--radius-element);
 }
 
 
-body#log { 
- background: transparent;
+body#log {
+    background: transparent;
 }
 
 table.log {
@@ -434,10 +424,6 @@ table.log td:nth-child(2) p span {
 
 /* login */
 
-.login .column {
-    
-}
-    
 .login .column:nth-child(1) {
      width: 15%;
      padding-top: 7px;
@@ -451,7 +437,7 @@ table.log td:nth-child(2) p span {
     color: var(--text);
     background-color: var(--backgroundtext);
     padding: 3px 10px 4px;
-    border-radius: 4px;
+    border-radius: var(--radius-element);
     border: none;
     outline: none;
 }
@@ -473,57 +459,53 @@ table.log td:nth-child(2) p span {
 
 /* Footer */
 
-footer
-{
- margin-top: 48px;
- padding-top: 38px;
- padding-bottom: 15px;
- border-top: 1px solid var(--textdark);
- background-image:url(logophotocopyvector_2-1.png);
- background-repeat: no-repeat;
- background-position: 0 27px;
- background-size: 60px;
- padding-left: 67px;
+footer {
+    margin-top: 48px;
+    padding-top: 38px;
+    padding-bottom: 15px;
+    border-top: 1px solid var(--textdark);
+    background-image:url(logophotocopyvector_2-1.png);
+    background-repeat: no-repeat;
+    background-position: 0 27px;
+    background-size: 60px;
+    padding-left: 67px;
 }
 
-footer p
-{
- font-size: 13px;
- line-height: 1em; 
+footer p {
+    font-size: 13px;
+    line-height: 1em; 
 }
 
 /* drinking tea/beer */
 
-.beer
-{
- text-decoration: line-through;
- position: relative;
+.beer {
+    text-decoration: line-through;
+    position: relative;
 }
 
-.beer::after
-{
- content: 'beer';
- font-size: 90%;
- text-decoration: none;
- position: absolute;
- z-index: 98;
- left: -10px; top: 17px;
- padding: 2px 7px 3px 8px;
- background: var(--backgroundtext);
- box-shadow: 0 3px 15px rgba(0,0,0,0.1);
- transform: rotate(-7deg);
+.beer::after {
+    content: 'beer';
+    font-size: 90%;
+    text-decoration: none;
+    position: absolute;
+    z-index: 98;
+    left: -10px;
+    top: 17px;
+    padding: 2px 7px 3px 8px;
+    background: var(--backgroundtext);
+    box-shadow: 0 3px 15px rgba(0,0,0,0.1);
+    transform: rotate(-7deg);
 }
 
 
 
 /* divider */
 
-.div
-{
- width: 100%;
- height: 2px;
- background-color: black;
- margin: 48px 0 48px;
+.div {
+    width: 100%;
+    height: 2px;
+    background-color: black;
+    margin: 48px 0 48px;
 }
 
 

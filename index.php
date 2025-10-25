@@ -32,23 +32,22 @@ print_header();
       <button class="party"><span>“Hallelujah!”</span></button>
       <button class="party"><span>Weißer Rauch</span></button>
       <button class="party"><span>Regenbogen</span></button>
-      <button class="party"><span>Fallout - communist detected on american soil</span></button>
-      <button class="party" id="sound_button_0"><span></span></button>
-      <button class="party" id="sound_button_1"><span></span></button>
-      <button class="party" id="sound_button_2"><span></span></button>
-      <button class="party" id="sound_button_3"><span></span></button>
-      <button class="party" id="sound_button_4"><span></span></button>
-      <button class="party" id="sound_button_5"><span></span></button>
-      <button class="party" id="sound_button_6"><span></span></button>
-      <button class="party" id="sound_button_7"><span></span></button>
-      <button class="party" id="sound_button_8"><span></span></button>
-      <button class="party" id="sound_button_9"><span></span></button>
-      <button class="party" id="sound_button_10"><span></span></button>
-      <button class="party" id="sound_button_11"><span></span></button>
-      <button class="party" id="sound_button_12"><span></span></button>
-      <button class="party" id="sound_button_13"><span></span></button>
-      <button class="party" id="sound_button_14"><span></span></button>
-      <button class="party" id="sound_button_15"><span></span></button>
+      <button class="party audio" id="sound_button_0"><span></span></button>
+      <button class="party audio" id="sound_button_1"><span></span></button>
+      <button class="party audio" id="sound_button_2"><span></span></button>
+      <button class="party audio" id="sound_button_3"><span></span></button>
+      <button class="party audio" id="sound_button_4"><span></span></button>
+      <button class="party audio" id="sound_button_5"><span></span></button>
+      <button class="party audio" id="sound_button_6"><span></span></button>
+      <button class="party audio" id="sound_button_7"><span></span></button>
+      <button class="party audio" id="sound_button_8"><span></span></button>
+      <button class="party audio" id="sound_button_9"><span></span></button>
+      <button class="party audio" id="sound_button_10"><span></span></button>
+      <button class="party audio" id="sound_button_11"><span></span></button>
+      <button class="party audio" id="sound_button_12"><span></span></button>
+      <button class="party audio" id="sound_button_13"><span></span></button>
+      <button class="party audio" id="sound_button_14"><span></span></button>
+      <button class="party audio" id="sound_button_15"><span></span></button>
   
     </div>
   
@@ -57,40 +56,40 @@ print_header();
     <div id="stats">
     
      <div class="row">
-	<div class="column">Papst ist online seit:</div>
-	<div class="column"><span class="highlight"><span id='boottime'></span></span></div>
+        <div class="column">Papst ist online seit:</div>
+        <div class="column"><span class="highlight"><span id='boottime'></span></span></div>
      </div>
      <div class="row">
-	<div class="column">Uptime:</div>
-	<div class="column"><div id="uptime"><span class="hidden" id=uptimevalue>0</span><span class="highlight"></span></div></div>
+        <div class="column">Uptime:</div>
+        <div class="column"><div id="uptime"><span class="hidden" id=uptimevalue>0</span><span class="highlight"></span></div></div>
      </div>
      <div class="row">
-	<div class="column">Umdrehungen:</div>
-	<div class="column"><span class="highlight"><span class="blink_me">1376</span></span></div>
+        <div class="column">Umdrehungen:</div>
+        <div class="column"><span class="highlight"><span class="blink_me">1376</span></span></div>
      </div>
      <div class="row">
-	<div class="column">Umdrehungen pro Minute:</div>
-	<div class="column"><span class="highlight"><span class="blink_me">80</span></span></div>
+        <div class="column">Umdrehungen pro Minute:</div>
+        <div class="column"><span class="highlight"><span class="blink_me">80</span></span></div>
      </div>
      <div class="row">
-	<div class="column">Aktive LEDs:</div>
-	<div class="column"><span class="highlight"><span id="active-leds">0500</span>/1024</span></div>
+        <div class="column">Aktive LEDs:</div>
+        <div class="column"><span class="highlight"><span id="active-leds">0500</span>/1024</span></div>
      </div>
      <div class="row">
-	<div class="column">Aktuelle Helligkeit:</div>
-	<div class="column"><span class="highlight">20%</span></div>
+        <div class="column">Aktuelle Helligkeit:</div>
+        <div class="column"><span class="highlight">20%</span></div>
      </div>
      <div class="row">
-	<div class="column">Aktivste User:</div>
-	<div class="column"><span class="highlight">der.mucki (97 actions)</span><br><span class="highlight">L@neTheP@in (66 actions)</span><br><span class="highlight">FatBeard (23 actions)</span></div>
+        <div class="column">Aktivste User:</div>
+        <div class="column"><span class="highlight">der.mucki (97 actions)</span><br><span class="highlight">L@neTheP@in (66 actions)</span><br><span class="highlight">FatBeard (23 actions)</span></div>
      </div>
      <div class="row">
-	<div class="column">Meistgespieltester Sound:</div>
-	<div class="column"><span class="highlight">"UT3_Multikill.wav"</span></div>
+        <div class="column">Meistgespieltester Sound:</div>
+        <div class="column"><span class="highlight">"UT3_Multikill.wav"</span></div>
      </div>
      <div class="row">
-	<div class="column">total actions:</div>
-	<div class="column"><span class="highlight">129</span></div>
+        <div class="column">total actions:</div>
+        <div class="column"><span class="highlight">129</span></div>
      </div>
      
     </div>

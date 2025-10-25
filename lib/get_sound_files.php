@@ -28,9 +28,13 @@ if( !$USERS_ACTIONS || !isset($USERS_ACTIONS["home_directory"]) ) {
     exit;
 }
 
-$audio_random_dir = $USERS_ACTIONS["home_directory"] . "/" . AUDIO_RANDOM_DIRECTORY;
+$audio_main_dir = $USERS_ACTIONS["home_directory"] . "/" . AUDIO_MAIN_DIRECTORY;
+$audio_main_files = scandir($audio_main_dir);
 
+$audio_random_dir = $USERS_ACTIONS["home_directory"] . "/" . AUDIO_RANDOM_DIRECTORY;
 $audio_random_files = scandir($audio_random_dir);
+
+$audio_random_files = array_merge( $audio_main_files, $audio_random_files );
 
 print( "{ ");
 
