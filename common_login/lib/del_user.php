@@ -11,10 +11,10 @@ require_once('userdata.php');
  
  connect_db();
  
- $res = mysql_query( "delete from USERS where idx='" . addslashes($_POST["user_id"]) . "'");
+ $res = $mysqli->query( "delete from USERS where idx='" . addslashes($_POST["user_id"]) . "'");
  
  if( !$res ) {
-     error_log("cannot delete user: " . mysql_error());
+     error_log("cannot delete user: " . $mysqli->error);
      echo "-2";
      exit;
  }

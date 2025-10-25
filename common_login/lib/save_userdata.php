@@ -20,7 +20,7 @@ foreach( $ALL_USERPROPS as $name => $value ) {
     error_log( " $name => " . $_POST[$name] . " ");
     $res = insert_or_update_userprops($_SESSION["USER"]["idx"], $name, $_POST[$name]);
     if( !$res ) {
-        error_log(mysql_error());
+        error_log($mysqli->error);
         echo "-3";
         exit;
     }    

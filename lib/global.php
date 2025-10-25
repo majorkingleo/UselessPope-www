@@ -25,6 +25,7 @@ if( $_SERVER["HTTP_HOST"] == "localhost" ||
 }
 
 $VERSION = "0.1";
+$mysqli = NULL;
 
 $HTML_HEADER = "";
 
@@ -51,15 +52,16 @@ setlocale(LC_ALL,'de_AT.UTF-8', 'de_DE.UTF-8','de_AT', 'de', 'ge');
 
 function connect_db()
 {
-    global $DATABASE, $DBPASSWD;
+    global $DATABASE, $DBPASSWD, $mysqli;
+
+    /* You should enable error reporting for mysqli before attempting to make a connection */
+    mysqli_report(MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT);
     
-    $link = mysql_connect( 'localhost', $DATABASE, $DBPASSWD ) or die( 'cannot connet to db: ' . mysql_error() );
+    $mysqli = new mysqli( 'localhost', $DATABASE, $DBPASSWD, $DATABASE ) or die( 'cannot connet to db: ' . $mysqli->connect_error );
 
-    if( !mysql_set_charset ( "utf8", $link ) ) {
-	    error_log( "cannot set utf charset " . mysql_error() );
+    if( !$mysqli->set_charset ( "utf8" ) ) {
+	    error_log( "cannot set utf charset " . $mysqli->error );
     }
-
-    mysql_select_db( $DATABASE ) or die ('cannot select database: ' . mysql_error() );
 }
 
 function add_in_html_header( $string )
@@ -101,8 +103,9 @@ function print_header( $menu_name = "", $rel = "", $extra_body_tag_text="")
 	echo "<meta http-equiv=\"Content-Script-Type\" content=\"text/javascript\" />\n";
 	echo "<meta name=\"author\" content=\"Martin Oberzalek, Philipp Hoffer, http://hoffer.cx\" />\n";
 	echo "<link rel=\"shortcut icon\" href=\"favicon.ico\" />\n";
-  echo "<script src=\"framework/jquery-3.7.1.js\"></script>\n";
-  echo "<script src=\"framework/party-2.2.0.min.js\"></script>\n";
+  echo "<script src=\""  . $rel . "framework/jquery-3.7.1.js\"></script>\n";
+  echo "<script src=\""  . $rel . "framework/jquery-ui-1.14.1/jquery-ui.min.js\"></script>\n";
+  echo "<script src=\""  . $rel . "framework/party-2.2.0.min.js\"></script>\n";
 
   echo "<meta name=\"keywords\" lang=\"de\" content=\"Teekränzchen, LAN Parties, der Papst\">\n";
   echo "<meta name=\"description\" lang=\"de\" content=\"Website des Teekränzchens.\">\n";

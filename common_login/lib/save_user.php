@@ -5,16 +5,18 @@ require_once('user_rights.php');
 require_once('userdata.php');
 
 function other_login_already_exists( $login, $user ) {
-    $res = mysql_query( "select count(*) from USERS where username='" . addslashes($login) . "'"
+    global $mysqli;
+
+    $res = $mysqli->query( "select count(*) from USERS where username='" . addslashes($login) . "'"
             . " and idx != '" . addslashes($user) . "'");
     
     if( !$res ) {
-        error_log( mysql_error() );
+        error_log( $mysqli->error );
         echo -3;
         return false;
     }
     
-    $row = mysql_fetch_array($res);
+    $row = $res->fetch_array();
     
     if( $row[0] > 0 ) {
         return true;
@@ -72,26 +74,26 @@ if( other_login_already_exists( $login, $user ) ) {
  }
 
 
-$res = mysql_query( "update USERS set " 
+$res = $mysqli->query( "update USERS set " 
         . " username='" . addslashes($login) . "',"
         . " locked='" . addslashes($locked) . "',"
         . " modification_time=CURRENT_TIMESTAMP()"
         . " where idx = '" . addslashes($user) . "'");
 
 if( !$res ) {
-    error_log( "edit_user.php: 1 " . mysql_error());
+    error_log( "edit_user.php: 1 " . $mysqli->error);
     echo -3;
     exit;
 }
 
 if( $password ) {
-    $res = mysql_query( "update USERS set " 
+    $res = $mysqli->query( "update USERS set " 
         . " password=PASSWORD('" . addslashes($password) . "'),"
         . " modification_time=CURRENT_TIMESTAMP()"
         . " where idx = '" . addslashes($user) . "'");
 
     if( !$res ) {
-        error_log( "edit_user.php: 2 " . mysql_error());
+        error_log( "edit_user.php: 2 " . $mysqli->error);
         echo -5;
         exit;
     }

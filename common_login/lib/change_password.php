@@ -19,14 +19,14 @@ if( !isset( $_POST["old_password"] ) || !trim($_POST["old_password"]) ) {
 
 connect_db();
 
-$res = mysql_query( "update USERS set "
+$res = $mysqli->query( "update USERS set "
         . " password=PASSWORD('" . addslashes($_POST["password"]) . "'), "
         . " modification_time = CURRENT_TIMESTAMP() " 
         . " where idx=" . $_SESSION["USER"]["idx"] 
         . " and password=PASSWORD('" . addslashes($_POST["old_password"]) ."')" );
 
 if( !$res ) {
-    error_log(mysql_error());
+    error_log($mysqli->error);
     echo "-3";
     exit;
 }

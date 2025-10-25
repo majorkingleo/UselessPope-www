@@ -5,15 +5,16 @@ require_once('user_rights.php');
 require_once('userdata.php');
 
 function login_already_exists( $login ) {
-    $res = mysql_query( "select count(*) from USERS where username='" . addslashes($login) . "'");
+    global $mysqli;
+    $res = $mysqli->query( "select count(*) from USERS where username='" . addslashes($login) . "'");
     
     if( !$res ) {
-        error_log( mysql_error() );
+        error_log( $mysql->error );
         echo -3;
         return false;
     }
     
-    $row = mysql_fetch_array($res);
+    $row = $res->fetch_array();
     
     if( $row[0] > 0 ) {
         return true;
@@ -67,13 +68,13 @@ if( login_already_exists( $login ) ) {
      exit;
  }
 
-$res = mysql_query( "insert into USERS ( username, password, creation_time, modification_time ) " .
+$res = $mysqli->query( "insert into USERS ( username, password, creation_time, modification_time ) " .
                " VALUES( '" . addslashes($login) . "'," 
                . "PASSWORD('" . addslashes($password) . "'),"
                . "CURRENT_TIMESTAMP(), CURRENT_TIMESTAMP() )"  );
 
 if( !$res ) {
-    error_log( "create_user.php: 1 " . mysql_error());
+    error_log( "create_user.php: 1 " . $mysqli->error);
     echo -3;
     exit;
 }

@@ -17,18 +17,18 @@ $ALL_USERPROPS_DESC = array(
 );
 
 function get_user_props( $user_idx ) {
-    global $ALL_USERPROPS;
+    global $ALL_USERPROPS, $mysqli;
     
-    $res = mysql_query("select * from USERPROPERTIES where user_idx = '" . addslashes($user_idx) . "'");
+    $res = $mysqli->query("select * from USERPROPERTIES where user_idx = '" . addslashes($user_idx) . "'");
     
     if( !$res ) {
-        error_log( "get_user_rights: " . mysql_error());
+        error_log( "get_user_rights: " . $mysqli->error);
         return null;
     }
     
     $ret = $ALL_USERPROPS;
     
-    while( $row = mysql_fetch_assoc( $res) ) {
+    while( $row = $res->fetch_assoc() ) {
         $ret[ $row["name"] ]= $row["value"];
     }
     
@@ -37,48 +37,50 @@ function get_user_props( $user_idx ) {
 
 function insert_or_update_userprops( $user, $name, $value )
 {
+    global $mysqli;    
+
       $props = get_user_props( $user );
       
       if( $props[$name] === $value ) {
           return true;          
       }
       
-      $res = mysql_query( "select value from USERPROPERTIES where "
+      $res = $mysqli->query( "select value from USERPROPERTIES where "
               . " user_idx = '" . addslashes($user) . "'"
               . " and name = '" . addslashes($name) . "'");
       
       if( !$res ) {
-          error_log( "insert_or_update_userprops 1:" . mysql_error());
+          error_log( "insert_or_update_userprops 1:" . $mysqli->error);
           return false;
       }
       
-      while( $row = mysql_fetch_assoc($res) ) {
+      while( $row = $res->fetch_assoc() ) {
           if( $row["value"] === $value ) {
               return true;
           }
           
-          $res = mysql_query( "update USERPROPERTIES set "
+          $res = $mysqli->query( "update USERPROPERTIES set "
                   . "value='" . addslashes($value) . "' "
                   . " where "
                   . " user_idx='" . addslashes($user) . "' and "
                   . " name='" . addslashes($name) . "'");
           
           if( !$res ) {
-            error_log( "insert_or_update_userprops 2:" . mysql_error());
+            error_log( "insert_or_update_userprops 2:" . $mysql->error);
             return false;             
           }
           
           return true;
       }
       
-      $res = mysql_query( "insert into USERPROPERTIES ( user_idx, name, value ) " 
+      $res = $mysqli->query( "insert into USERPROPERTIES ( user_idx, name, value ) " 
               . " VALUES ( " 
               . "'" . addslashes($user) . "',"
               . "'" . addslashes($name) . "',"
               . "'" . addslashes($value) . "')");
 
       if( !$res ) {
-            error_log( "insert_or_update_userprops 3:" . mysql_error());
+            error_log( "insert_or_update_userprops 3:" . $mysqli->error);
             return false;             
       }      
       
@@ -90,16 +92,18 @@ function insert_or_update_userprops( $user, $name, $value )
  */
 function save_update_or_read_user_properties()
 {
+    global $mysqli;
+
     $updated = array();
     
-    $res = mysql_query( "select * from USERPROPERTIES where user_idx=" . $_SESSION["USER"]["idx"] );       
+    $res = $mysqli->query( "select * from USERPROPERTIES where user_idx=" . $_SESSION["USER"]["idx"] );       
     
     if (!$res) {
-        error_log(" save_update_or_read_user_properties 1 " . mysql_error());
+        error_log(" save_update_or_read_user_properties 1 " . $mysqli->error);
         return false;
     }    
     
-    while( $row = mysql_fetch_assoc($res) ) {                
+    while( $row = $res->fetch_assoc() ) {                
         
         $found = false;
         
@@ -115,12 +119,12 @@ function save_update_or_read_user_properties()
                 if( $row["value"] !== $value ) {
                     error_log( "updating: " . $key . " value is " . $value . " old value was: " .  $row["value"] );
                     // update
-                    $res2 = mysql_query( "update USERPROPERTIES set value='" . addslashes($value) . "'" 
+                    $res2 = $mysqli->query( "update USERPROPERTIES set value='" . addslashes($value) . "'" 
                                      . " where user_idx = " . $_SESSION["USER"]["idx"] 
                                      . " and name = '" . addslashes($key) . "'");                    
                     
                     if( !$res2 ) {
-                        error_log(" save_update_or_read_user_properties 2 " . mysql_error());
+                        error_log(" save_update_or_read_user_properties 2 " . $mysqli->error());
                         return false;
                     }
                 }
@@ -159,13 +163,13 @@ function save_update_or_read_user_properties()
         // error_log( "found: " . $key . " value is " . $value . " found: " . $found);
         
         if( !$found ) {
-            $res3 = mysql_query( "insert into USERPROPERTIES ( user_idx, name, value ) VALUES " 
+            $res3 = $mysqli->query( "insert into USERPROPERTIES ( user_idx, name, value ) VALUES " 
                         . "( " .  $_SESSION["USER"]["idx"] . ","
                         . "'" . addslashes($key) . "'," 
                         . "'" . addslashes($value) . "')" );
             
             if( !$res3 ) {
-                 error_log(" save_update_or_read_user_properties 3 " . mysql_error());
+                 error_log(" save_update_or_read_user_properties 3 " . $mysql->error);
                  return false;
             }            
         }
@@ -176,22 +180,22 @@ function save_update_or_read_user_properties()
 
 function get_user_name_array($user_idx) {
     
-    global $ALL_USERPROPS;
+    global $ALL_USERPROPS, $mysqli;
     
     static $all_users = array();    
     
     if( sizeof($all_users) == 0  ) {
-        $res = mysql_query( "select * from USERPROPERTIES where "
+        $res = $mysqli->query( "select * from USERPROPERTIES where "
                 . " name = '" . USERPROP_FORENAME . "' or "
                 . " name = '" . USERPROP_SURENAME . "' or "
                 . " name = '" . USERPROP_TITLE . "'" );
         
         if( !$res ) {
-            error_log( "get_user_name_array: " . mysql_error());
+            error_log( "get_user_name_array: " . $mysqli->error);
             return false;
         }                
         
-        while( $row = mysql_fetch_assoc($res)) {
+        while( $row = $res->fetch_assoc()) {
             
             // error_log( "row: " . $row["name"]);
             
@@ -212,6 +216,8 @@ function get_user_name_array($user_idx) {
 
 function fetch_users( $idx = -1 )
 {
+    global $mysqli;
+
     if( $idx >= 0 ) {
         $res = mysql_query("select * from USERS where idx=" . addslashes($idx) );           
     } else {

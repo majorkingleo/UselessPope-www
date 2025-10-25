@@ -14,17 +14,17 @@ if( !isset( $_POST["password"] ) || !trim($_POST["password"]) ) {
 
 connect_db();
 
-$res = mysql_query( "select * from USERS "
+$res = $mysqli->query( "select * from USERS "
         . " where idx=" . $_SESSION["USER"]["idx"] 
         . " and password=PASSWORD('" . addslashes($_POST["password"]) ."')" );
 
 if( !$res ) {
-    error_log(mysql_error());
+    error_log($mysqli->error);
     echo "-3";
     exit;
 }
 
-while( $row = mysql_fetch_assoc($res) ) {
+while( $row = $res->fetch_assoc() ) {
     echo "1";
     exit;
 }

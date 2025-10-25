@@ -18,30 +18,30 @@ connect_db();
     
 //error_log("username: " . $_POST["username"] . " password: " . $_POST["password"]);
 
-$res = mysql_query( "select * from USERS where "
+$res = $mysqli->query( "select * from USERS where "
         . "username='" . addslashes($_POST["username"]) . "' and "
         . "password=PASSWORD('" . addslashes($_POST["password"]) . "') and "
         . "locked=0" );
 
 if( !$res )
 {
-    error_log("failed 0:  "  . mysql_error());
-    die( mysql_error() );
+    error_log("failed 0:  "  . $mysqli->error);
+    die( $mysqli->error );
 }
 
-while( $row = mysql_fetch_assoc($res ) )
+while( $row = $res->fetch_assoc() )
 {   
     $_SESSION["USER"] = $row;
     save_update_or_read_user_properties();
     $_SESSION["USERRIGHTS"] = get_user_rights( $_SESSION["USER"]["idx"] );
     
-    $res = mysql_query( "update USERS set last_login = NOW(), failed_count = 0 where "
+    $res = $mysqli->query( "update USERS set last_login = NOW(), failed_count = 0 where "
                      . " username='" . addslashes($_POST["username"]) . "' ");
             
     if( !$res )
     {
-       error_log("failed 1:  "  . mysql_error());
-       die( mysql_error() );
+       error_log("failed 1:  "  . $mysqli->error);
+       die( $mysqli->error );
     }
        
     
@@ -53,17 +53,17 @@ error_log( "couldn't logged in " . addslashes($_POST["username"]) . " pw: '" . a
 
 /* increase failed logins */
 
-$res = mysql_query( "select *, UNIX_TIMESTAMP(last_failed_login) from USERS where "
+$res = $mysqli->query( "select *, UNIX_TIMESTAMP(last_failed_login) from USERS where "
         . "username='" . addslashes($_POST["username"]) . "' and "        
         . "locked=0" );
 
 if( !$res )
 {
-    error_log("failed 2:  "  . mysql_error());
-    die( mysql_error() );
+    error_log("failed 2:  "  . $mysqli->error);
+    die( $mysqli->error );
 }
 
-while( $row = mysql_fetch_assoc($res ) )
+while( $row = $res->fetch_assoc() )
 {
     error_log( "found username in database" );
     
@@ -74,37 +74,37 @@ while( $row = mysql_fetch_assoc($res ) )
     }
     
     if( $row["UNIX_TIMESTAMP(last_failed_login)"] >= time(0) - 60*60 ) {
-        $res = mysql_query( "update USERS set last_failed_login = NOW(), failed_count = failed_count + 1 where "
+        $res = $mysqli->query( "update USERS set last_failed_login = NOW(), failed_count = failed_count + 1 where "
                 . " username='" . addslashes($_POST["username"]) . "' ");
         
         if( !$res )
         {
-            error_log("failed 3:  "  . mysql_error());
-            die( mysql_error() );
+            error_log("failed 3:  "  . $mysqli->error);
+            die( $mysqli->error );
         }
         
         error_log( "last_failed is now" );
         
         if( $row["failed_count"] + 1 > 5 ) {
-            $res = mysql_query( "update USERS set last_failed_login = NOW(), locked = 1 where "
+            $res = $mysqli->query( "update USERS set last_failed_login = NOW(), locked = 1 where "
                      . " username='" . addslashes($_POST["username"]) . "' ");
             
             if( !$res )
             {
-                error_log("failed 4:  "  . mysql_error());
-                die( mysql_error() );
+                error_log("failed 4:  "  . $mysqli->error);
+                die( $mysqli->error );
             }        
             break;
         }
     } else {
         error_log( "last_failed is now" );
         
-        $res = mysql_query("update USERS set last_failed_login = NOW() where "
+        $res = $mysqli->query("update USERS set last_failed_login = NOW() where "
                 . " username='" . addslashes($_POST["username"]) . "' ");
 
         if (!$res) {
-            error_log("failed 5:  " . mysql_error());
-            die(mysql_error());
+            error_log("failed 5:  " . $mysqli->error);
+            die($mysqli->error);
         }
         break;
     }
