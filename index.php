@@ -48,6 +48,13 @@ print_header();
       <button class="party audio" id="sound_button_13"><span></span></button>
       <button class="party audio" id="sound_button_14"><span></span></button>
       <button class="party audio" id="sound_button_15"><span></span></button>
+      <button class="party audio" id="sound_button_16"><span></span></button>
+      <button class="party audio" id="sound_button_17"><span></span></button>
+      <button class="party audio" id="sound_button_18"><span></span></button>
+      <button class="party audio" id="sound_button_19"><span></span></button>
+      <button class="party audio" id="sound_button_20"><span></span></button>
+      <button class="party audio" id="sound_button_21"><span></span></button>
+      <button class="party audio" id="sound_button_22"><span></span></button>
   
     </div>
   

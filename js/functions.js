@@ -41,7 +41,7 @@ $(document).ready(function() {
                         }
                     }
 
-                    for( var i = idx; i < 100; ++i ) {                        
+                    for( var i = idx + 1; i < 100; ++i ) {                        
                         $('#sound_button_' + i).css("display", "none");
                     }
                     
