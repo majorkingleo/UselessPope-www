@@ -1,3 +1,19 @@
+<?php
+include_once( 'lib/global.php' );
+include_once( 'lib/appinfo.php' );
+include_once( 'lib/holidays.php' );
+
+// constant for session
+$CURRENT_PAGE="INDEX";
+
+if( !logged_in() )
+{
+    header( "Location: common_login/login.php" );
+    exit(0);
+}
+
+print_header();
+?>
 <!DOCTYPE html>
 
 
