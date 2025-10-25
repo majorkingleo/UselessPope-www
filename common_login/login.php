@@ -22,11 +22,11 @@ print_header("", "../");
     <form>
     <div class="row">
                 <div class="column"><label for="username">Benutzername:</label></div>
-                <div class="column"><input type="text" name="username" id="username" class="ui-widget ui-corner-all"/></div>
+                <div class="column"><input type="text" name="username" id="username" class="input"/></div>
     </div>
     <div class="row">
                 <div class="column"><label for="password">Passwort:</label></div>
-                <div class="column"><input type="password" name="password" id="password" class="ui-widget ui-corner-all"/></div>
+                <div class="column"><input type="password" name="password" id="password" class="input"/></div>
     </div>
     <div class="row">
                 <div class="column"><input type="submit" name="submit" class="button ui-button ui-button-text-only ui-widget ui-state-default ui-corner-all" id="submit_btn" value="Anmelden"/></div>

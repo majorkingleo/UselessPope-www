@@ -1,8 +1,10 @@
 <?php
-
 require_once(dirname(__FILE__) . "/../common_login/lib/user_rights.php");
 
 date_default_timezone_set('Europe/Vienna');
+
+define('AUDIO_MAIN_DIRECTORY', "audio_main" );
+define('AUDIO_RANDOM_DIRECTORY', "audio_random" );
 
 $SITE_NAME = "Useless Papst &middot; Teekränzchen LIVE";
 
@@ -382,7 +384,6 @@ function to_timestamp($date) {
     
     return $stamp;
 }
-
 
 function get_name( $row )
 {

@@ -32,12 +32,23 @@ print_header();
       <button class="party"><span>“Hallelujah!”</span></button>
       <button class="party"><span>Weißer Rauch</span></button>
       <button class="party"><span>Regenbogen</span></button>
-      <button class="party"><span>battlefield-3-theme-song-anime-style.mp3</span></button>
-      <button class="party"><span>Lockdown_00b1c8c9323423423424.mp3</span></button>
-      <button class="party"><span>Test</span></button>
-      <button class="party"><span>Test</span></button>
-      <button class="party"><span>Test</span></button>
-      <button class="party"><span>battlefield-3-theme-song-anime-style.mp3</span></button>
+      <button class="party"><span>Fallout - communist detected on american soil</span></button>
+      <button class="party" id="sound_button_0"><span></span></button>
+      <button class="party" id="sound_button_1"><span></span></button>
+      <button class="party" id="sound_button_2"><span></span></button>
+      <button class="party" id="sound_button_3"><span></span></button>
+      <button class="party" id="sound_button_4"><span></span></button>
+      <button class="party" id="sound_button_5"><span></span></button>
+      <button class="party" id="sound_button_6"><span></span></button>
+      <button class="party" id="sound_button_7"><span></span></button>
+      <button class="party" id="sound_button_8"><span></span></button>
+      <button class="party" id="sound_button_9"><span></span></button>
+      <button class="party" id="sound_button_10"><span></span></button>
+      <button class="party" id="sound_button_11"><span></span></button>
+      <button class="party" id="sound_button_12"><span></span></button>
+      <button class="party" id="sound_button_13"><span></span></button>
+      <button class="party" id="sound_button_14"><span></span></button>
+      <button class="party" id="sound_button_15"><span></span></button>
   
     </div>
   
@@ -51,7 +62,7 @@ print_header();
      </div>
      <div class="row">
 	<div class="column">Uptime:</div>
-	<div class="column"><div id="uptime"><span class="hidden" id=uptimevalue>555555</span><span class="highlight"></span></div></div>
+	<div class="column"><div id="uptime"><span class="hidden" id=uptimevalue>0</span><span class="highlight"></span></div></div>
      </div>
      <div class="row">
 	<div class="column">Umdrehungen:</div>

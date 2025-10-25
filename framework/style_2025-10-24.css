@@ -26,12 +26,13 @@
 
 :root
 {
- --backgroundbody:	#080808; 
- --backgroundcontent:	#252525; 
- --backgroundtext:	rgba(250,250,250,0.06); 
- --text:		rgb(200,200,200);
- --textbright:		rgb(250,250,250);
- --textdark:		rgba(250,250,250,0.3);
+ --backgroundbody:     #080808; 
+ --backgroundcontent:  #252525; 
+ --backgroundtext:     rgba(250,250,250,0.06); 
+ --text:               rgb(200,200,200);
+ --textbright:         rgb(250,250,250);
+ --textdark:           rgba(250,250,250,0.3);
+ --radius-element:     4px;
 }
 
 
@@ -221,94 +222,82 @@ to {
 
 /* actions */
 
-.grid
-{
- display: grid;
- grid-template-columns: repeat(auto-fill, minmax(205px, 1fr));
- grid-gap: 10px;
- margin-top: 10px;
+.grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(205px, 1fr));
+    grid-gap: 10px;
+    margin-top: 10px;
 }
 
 button,
-input.button
-{
- display: block;
- position: relative;
- cursor: pointer;
- padding: 20px;
- color: var(--text);
- background-color: var(--backgroundtext);
- border-radius: 4px;
- border: none;
- box-shadow: 0 4px 12px rgba(0,0,0,0.0);
- transition: all .33s ease-out;
+input.button {
+    display: block;
+    position: relative;
+    cursor: pointer;
+    padding: 18px 20px;
+    color: var(--text);
+    background-color: var(--backgroundtext);
+    border-radius: var(--radius-element);
+    border: none;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.0);
+    transition: all .33s ease-out;
 }
 
-button span
-{
- position: relative;
- z-index: 2;
- overflow-wrap: break-word;
+button span {
+    position: relative;
+    z-index: 2;
+    overflow-wrap: break-word;
 }
 
 button::after,
-input.button::after
-{
- position: absolute;
- content: "";
- border-radius: 0 0 4px 4px;
- bottom: 0;
- left: 0;
- width: 100%;
- height: 0;
- background-size: 400% 400%;
- animation: button_gradient 15s ease infinite;
- transition: all .33s ease-out;
+input.button::after {
+    position: absolute;
+    content: "";
+    border-radius: 0 0 var(--radius-element) var(--radius-element);
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 0;
+    background-size: 400% 400%;
+    animation: button_gradient 15s ease infinite;
+    transition: all .33s ease-out;
 }
 
-button:nth-child(6n+1)::after
-{
- background-image: linear-gradient(70deg, #23a6d5, #ee7752, #e73c7e);    
+button:nth-child(6n+1)::after {
+    background-image: linear-gradient(70deg, #23a6d5, #ee7752, #e73c7e);    
 }
 
-button:nth-child(6n+2)::after
-{
- background-image: linear-gradient(70deg, #e73c7e, #23a6d5, #ee7752);    
+button:nth-child(6n+2)::after {
+    background-image: linear-gradient(70deg, #e73c7e, #23a6d5, #ee7752);    
 }
 
-button:nth-child(6n+3)::after
-{
- background-image: linear-gradient(70deg, #20aa58, #aa9015, #1996c5);    
+button:nth-child(6n+3)::after {
+    background-image: linear-gradient(70deg, #20aa58, #aa9015, #1996c5);    
 }
 
-button:nth-child(6n+4)::after
-{
- background-image: linear-gradient(70deg, #5055bb, #e75522, #20ca58);    
+button:nth-child(6n+4)::after {
+    background-image: linear-gradient(70deg, #5055bb, #e75522, #20ca58);    
 }
 
-button:nth-child(6n+5)::after
-{
- background-image: linear-gradient(70deg, #62482E, #20aa58, #2366d5);    
+button:nth-child(6n+5)::after {
+    background-image: linear-gradient(70deg, #62482E, #20aa58, #2366d5);    
 }
 
-button:nth-child(6n+6)::after
-{
- background-image: linear-gradient(70deg, #ee7752, #e73c7e, #23a6d5);
+button:nth-child(6n+6)::after {
+    background-image: linear-gradient(70deg, #ee7752, #e73c7e, #23a6d5);
 }
 
 button:hover,
-input.button:hover
-{
- color: var(--textbright);
- box-shadow: 0 4px 15px rgba(0,0,0,0.5);
- transition: all .1s ease-out;
+input.button:hover {
+    color: var(--textbright);
+    box-shadow: 0 4px 15px rgba(0,0,0,0.25);
+    transition: all .1s ease-out;
 }
 
-button:hover::after
-{
- height: 100%;
- border-radius: 4px;
- transition: all .1s ease-out;
+button:hover::after {
+    height: 100%;
+    border-radius: var(--radius-element);
+    transition: all .1s ease-out;
 }
 
 @keyframes button_gradient {
@@ -325,29 +314,28 @@ button:hover::after
 /* stats */
 
 .row {
-  width: 100%;
+    width: 100%;
 }
 
 .row:after {
-  content: "";
-  display: table;
-  clear: both;
+    content: "";
+    display: table;
+    clear: both;
 }
 
 .column {
-  float: left;
-  width: 48%;
-  padding: 4px 10px 1px 0;
-  !background: red;
+    float: left;
+    width: 48%;
+    padding: 4px 10px 1px 0;
 }
 
 .column:nth-child(1) {
-  width: 30%;
-  min-width: 120px;
+    width: 30%;
+    min-width: 120px;
 }
 
 .column:nth-child(2) {
-  width: 70%;
+    width: 70%;
 }
 
     @media screen and (max-width: 666px) {
@@ -360,30 +348,25 @@ button:hover::after
     }
 
 
-#stats .column span.highlight
-{
- display: inline-block;
- position: relative;
- background-color: var(--backgroundtext);
- padding: 1px 10px 2px;
- border-radius: 3px;
- 1box-shadow: 0 2px 5px rgba(0,0,0,0.05);
- margin-bottom: 5px;
+#stats .column span.highlight {
+    display: inline-block;
+    position: relative;
+    background-color: var(--backgroundtext);
+    padding: 1px 10px 2px;
+    border-radius: calc(var(--radius-element) - 1px);
+    margin-bottom: 5px;
 }
 
-#stats .hidden
-{
- display: none;
+#stats .hidden {
+    display: none;
 }
 
-.blink_me
-{
- animation: blinker 2s linear infinite;
- padding: 0;
+.blink_me {
+    animation: blinker 2s linear infinite;
+    padding: 0;
 }
 
-@keyframes blinker
-{
+@keyframes blinker {
  50% {
     opacity: 20%;
  }
@@ -391,81 +374,91 @@ button:hover::after
 
 /* event log */
 
-iframe
-{
- margin-top: 10px;
- border: none;
- width:100%; 
- padding: 0;
- background-color: var(--backgroundtext);
- border-radius: 4px;
+iframe {
+    margin-top: 10px;
+    border: none;
+    width:100%; 
+    padding: 0;
+    background-color: var(--backgroundtext);
+    border-radius: 4px;
 }
 
 
-body#log
-{
+body#log { 
  background: transparent;
 }
 
-table.log
-{
- width: 100%;
+table.log {
+    width: 100%;
 }
 
 table.log tr:nth-child(2n) {
- background: var(--backgroundcontent);
+    background: var(--backgroundcontent);
 }
 
 table.log,
 table.log th,
-table.log td
-{
-  border: none;
-  border-collapse: collapse;
-  padding: 0; 
-  margin: 0;
-  vertical-align: top;
+table.log td {
+    border: none;
+    border-collapse: collapse;
+    padding: 0; 
+    margin: 0;
+    vertical-align: top;
 }
 
-table.log td
-{
- padding: 7px 14px 4px 12px ;
+table.log td {
+    padding: 7px 14px 4px 12px ;
 }
 
-table.log td:nth-child(1)
-{
- font-size: 11px;
- white-space: nowrap;
- padding-top: 7px;
+table.log td:nth-child(1) {
+    font-size: 11px;
+    white-space: nowrap;
+    padding-top: 7px;
 }
 
-table.log td:nth-child(2)
-{
- padding-left: 0;
- padding-right: 6px;
+table.log td:nth-child(2) {
+    padding-left: 0;
+    padding-right: 6px;
 }
 
-table.log td:nth-child(2) p
-{
- font-size: 14px;
- line-height: 17px;
- margin-bottom: 5px;
+table.log td:nth-child(2) p {
+    font-size: 14px;
+    line-height: 17px;
+    margin-bottom: 5px;
 }
 
-table.log td:nth-child(2) p span
-{
- font-weight: bold;
+table.log td:nth-child(2) p span {
+    font-weight: bold;
 }
 
 
 /* login */
 
+.login .column {
+    
+}
+    
 .login .column:nth-child(1) {
-  width: 10%;
+     width: 15%;
+     padding-top: 7px;
 }
 
 .login .row {
     min-height: 50px;
+}
+
+.login input.input {
+    color: var(--text);
+    background-color: var(--backgroundtext);
+    padding: 3px 10px 4px;
+    border-radius: 4px;
+    border: none;
+    outline: none;
+}
+
+.login input.input:active,
+.login input.input:focus {
+    outline: 3px solid rgba(255,255,255,0.15);
 }
 
 .login input.button {
@@ -475,6 +468,7 @@ table.log td:nth-child(2) p span
 .login input.button:hover {
     background-image: linear-gradient(70deg, #62482E, #20aa58);
 }
+
 
 
 /* Footer */

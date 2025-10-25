@@ -1,19 +1,53 @@
 
 $(document).ready(function() {
    
-        setInterval( function() {
-        $.get( "lib/get_uptime.php", function( data ) {
-            
-            var arr = $.parseJSON( data );
-            for( var key in arr ) {
-                var value = arr[key];
-                // console.log(key, value);
-                $('#' + key).text( value );
-            }
-            
-            });
-    }, 1000 );
+        if( $("#uptime").length )
+        {
+            setInterval( function() {
+            $.get( "lib/get_uptime.php", function( data ) {            
+                    var arr = $.parseJSON( data );
+                    for( var key in arr ) {
+                        var value = arr[key];
+                        // console.log(key, value);
+                        $('#' + key).text( value );
+                    }
+                    
+                    });
+            }(), 1000 );
 
+
+            setInterval( function() {
+            $.get( "lib/get_sound_files.php", function( data ) {            
+                    var arr = $.parseJSON( data );
+                    var idx = 0;
+                    for( var key in arr ) {
+                        var value = arr[key];
+                        // console.log(key, value);
+                        $('#' + key).children().text( value );
+                        $('#' + key).css("display", "block");
+                        $('#' + key).click( function(){ 
+                            var file_name = $(this).children().text();
+                            $.ajax({
+                                type: "POST",
+                                url: "lib/play_file.php",
+                                data: "file=" + encodeURIComponent(file_name)
+                            });
+                        });
+
+                        // get XX from sound_button_XX
+                        const components = key.split("_");                        
+                        if( components.length == 3 ) {                            
+                            idx = parseInt(components[2]);
+                        }
+                    }
+
+                    for( var i = idx; i < 100; ++i ) {                        
+                        $('#sound_button_' + i).css("display", "none");
+                    }
+                    
+                    });
+            }(), 1000 );
+        }
 });
 
 /**
