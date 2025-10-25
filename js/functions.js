@@ -1,57 +1,19 @@
 
 $(document).ready(function() {
-    $(".toolbar-button").button();
-    
-    $("#tb_my").click(function(){
-        window.location= rel + "common_login/admin_myself.php";
-    });
-    
-    $("#tb_admin_users").click(function(){
-        window.location= rel + "common_login/admin_users.php";
-    });    
-    
-    $("#tb_logout").click(function(){
-        window.location= rel + "common_login/logout.php";
-    });     
-    
-    $("#tb_contacts").click(function(){
-        window.location= rel + "contacts.php";
-    });         
-    
-    $("#tb_rooms").click(function(){
-        window.location= rel + "rooms.php";
-    });       
-    
-    $("#tb_appointments").click(function(){
-        window.location= rel + "appointments.php";
-    });           
-    
-    $("#tb_groups").click(function(){
-        window.location= rel + "groups.php";
-    });        
-    
-    $("#tb_course").click(function(){
-        window.location= rel + "course.php";
-    });   
+   
+        setInterval( function() {
+        $.get( "lib/get_uptime.php", function( data ) {
+            
+            var arr = $.parseJSON( data );
+            for( var key in arr ) {
+                var value = arr[key];
+                // console.log(key, value);
+                $('#' + key).text( value );
+            }
+            
+            });
+    }, 1000 );
 
-    $("#tb_seasons").click(function(){
-        window.location= rel + "seasons.php";
-    });  
-
-    $("#tb_statistics").click(function(){
-        window.location= rel + "statistics.php";
-    });   
-    
-
-    $("#tb_backup").click(function(){
-        window.location= rel + "backup.php";
-    });     
-
-    $("#toolbar-admin").hide();
-    
-    $("#tb_admin").click(function(){
-        $("#toolbar-admin").show(500);
-    });        
 });
 
 /**

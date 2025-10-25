@@ -1,7 +1,5 @@
 <?php
 include_once( 'lib/global.php' );
-include_once( 'lib/appinfo.php' );
-include_once( 'lib/holidays.php' );
 
 // constant for session
 $CURRENT_PAGE="INDEX";
@@ -14,34 +12,7 @@ if( !logged_in() )
 
 print_header();
 ?>
-<!DOCTYPE html>
 
-
-
-<html>
-
-<head>
-
-<meta http-equiv="content-type" content="text/html; charset=utf-8">
-<meta http-equiv="cache-control" content="no-store">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-
-<title>Useless Papst &middot; Teekränzchen LIVE</title>
-
-<meta http-equiv="Content-Script-Type" content="text/javascript">
-<link rel="stylesheet" type="text/css" href="framework/w3.css">
-<link rel="stylesheet" type="text/css" href="framework/style_2025-10-24.css">
-<script src="framework/jquery-3.7.1.js"></script>
-<script src="framework/party-2.2.0.min.js"></script>
-
-<meta name="robots" content="index, follow">
-<meta name="author" content="Phil Hoffer - rotane">
-<meta name="keywords" lang="de" content="Teekränzchen, LAN Parties, der Papst">
-<meta name="description" lang="de" content="Website des Teekränzchens.">
-
-<link rel="shortcut icon" href="favicon.ico">
-<link rel="icon" href="favicon.ico" type="image/x-icon">
-</head>
 
 <body lang="de" id="papst">
 
@@ -61,11 +32,12 @@ print_header();
       <button class="party"><span>“Hallelujah!”</span></button>
       <button class="party"><span>Weißer Rauch</span></button>
       <button class="party"><span>Regenbogen</span></button>
+      <button class="party"><span>battlefield-3-theme-song-anime-style.mp3</span></button>
+      <button class="party"><span>Lockdown_00b1c8c9323423423424.mp3</span></button>
       <button class="party"><span>Test</span></button>
       <button class="party"><span>Test</span></button>
       <button class="party"><span>Test</span></button>
-      <button class="party"><span>Test</span></button>
-      <button class="party"><span>Test</span></button>
+      <button class="party"><span>battlefield-3-theme-song-anime-style.mp3</span></button>
   
     </div>
   
@@ -75,11 +47,11 @@ print_header();
     
      <div class="row">
 	<div class="column">Papst ist online seit:</div>
-	<div class="column"><span class="highlight">Freitag, 21. Oktober 2025, 10:37:23</span></div>
+	<div class="column"><span class="highlight"><span id='boottime'></span></span></div>
      </div>
      <div class="row">
 	<div class="column">Uptime:</div>
-	<div class="column"><div id="uptime"><span class="hidden">555555</span><span class="highlight"></span></div></div>
+	<div class="column"><div id="uptime"><span class="hidden" id=uptimevalue>555555</span><span class="highlight"></span></div></div>
      </div>
      <div class="row">
 	<div class="column">Umdrehungen:</div>
@@ -118,12 +90,9 @@ print_header();
   
 </main>
 
-<footer>
-  
-  <p>Eine TK Produktion.</p>
-  <p>Drinking <span class="beer">tea</span> since 2005.</p>
-  
-</footer>
+<?php
+print_footer();
+?>
 
 </div> <!-- main container #tk -->
 

@@ -2,6 +2,8 @@
 
 require_once(dirname(__FILE__) . "/../common_login/lib/user_rights.php");
 
+date_default_timezone_set('Europe/Vienna');
+
 $SITE_NAME = "Useless Papst &middot; Teekränzchen LIVE";
 
 $IS_TEST = false;
@@ -92,32 +94,30 @@ function print_header( $menu_name = "", $rel = "", $extra_body_tag_text="")
 	  $iphone = 0;
   endif;
 
-	echo "<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Transitional//EN\" \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd\">\n";
-	echo "<html xmlns=\"http://www.w3.org/1999/xhtml\" lang=\"de\" xml:lang=\"en\">\n\n";	
-	echo "<head>\n<title>" . $SITE_NAME . "</title>\n";
-	echo "<meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\" />\n";
-	echo "<meta http-equiv=\"Pragma\" content=\"no-cache\">\n";
-	echo "<meta http-equiv=\"Expires\" content=\"0\">\n";
-	echo "<meta http-equiv=\"Content-Language\" content=\"de\" />\n";
-	echo "<meta http-equiv=\"Content-Style-Type\" content=\"text/css\" />\n";
-	echo "<meta http-equiv=\"Content-Script-Type\" content=\"text/javascript\" />\n";
-	echo "<meta name=\"author\" content=\"Martin Oberzalek, Philipp Hoffer, http://hoffer.cx\" />\n";
-	echo "<link rel=\"shortcut icon\" href=\"favicon.ico\" />\n";
-  echo "<script src=\""  . $rel . "framework/jquery-3.7.1.js\"></script>\n";
-  echo "<script src=\""  . $rel . "framework/jquery-ui-1.14.1/jquery-ui.min.js\"></script>\n";
-  echo "<script src=\""  . $rel . "framework/party-2.2.0.min.js\"></script>\n";
 
-  echo "<meta name=\"keywords\" lang=\"de\" content=\"Teekränzchen, LAN Parties, der Papst\">\n";
-  echo "<meta name=\"description\" lang=\"de\" content=\"Website des Teekränzchens.\">\n";
-  echo "<meta name=\"robots\" content=\"index, follow\">\n";
-
-  echo "<script src=\"" . $rel . "js/functions.js\" type=\"text/javascript\" charset=\"utf-8\"></script>\n";	  
-  
+echo "<!DOCTYPE html>\n";
+echo "<html>\n";
+echo "<head>\n";
+echo "<meta http-equiv=\"content-type\" content=\"text/html; charset=utf-8\">\n";
+echo "<meta http-equiv=\"cache-control\" content=\"no-store\">\n";
+echo "<meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">\n";
+echo "<head>\n<title>" . $SITE_NAME . "</title>\n";
+echo "<meta http-equiv=\"Content-Script-Type\" content=\"text/javascript\">\n";
+echo "<link rel=\"stylesheet\" type=\"text/css\" href=\"" . $rel . "framework/w3.css\">\n";
+echo "<link rel=\"stylesheet\" type=\"text/css\" href=\"" . $rel . "framework/style_2025-10-24.css\">\n";
+echo "<script src=\"" . $rel . "framework/jquery-3.7.1.js\"></script>\n";
+echo "<script src=\"" . $rel . "framework/jquery-ui-1.14.1/jquery-ui.min.js\"></script>\n";
+echo "<script src=\"" . $rel . "framework/party-2.2.0.min.js\"></script>\n";
+echo "<script src=\"" . $rel . "js/functions.js\" type=\"text/javascript\" charset=\"utf-8\"></script>\n";	  
   echo "<script type=\"text/javascript\">\n";
   echo "var rel = \"$rel\"\n";
-  echo "</script>\n";       
-  
-  echo $HTML_HEADER;
+  echo "</script>\n";   
+echo "<meta name=\"robots\" content=\"index, follow\">\n";
+echo "<meta name=\"author\" content=\"Martin Oberzalek, Phil Hoffer\">\n";
+echo "<meta name=\"keywords\" lang=\"de\" content=\"Teekränzchen, LAN Parties, der Papst\">\n";
+echo "<meta name=\"description\" lang=\"de\" content=\"Website des Useless Papsts.\">\n";
+echo "<link rel=\"shortcut icon\" href=\"favicon.ico\">\n";
+echo "<link rel=\"icon\" href=\"favicon.ico\" type=\"image/x-icon\">\n";
   
 	echo "</head>\n\n";	
 
@@ -127,8 +127,6 @@ function print_header( $menu_name = "", $rel = "", $extra_body_tag_text="")
 		$bodyclass.=" test";
 	}
 
-  echo "<body $extra_body_tag_text>\n";               
-  echo "<div class=\"main\">\n";
 }
 
 function microtime_float()
@@ -158,10 +156,11 @@ function debug_runtime( $info = "")
 
 function print_footer()
 {
+  echo "<footer>\n";
+  echo "<p>Eine TK Produktion.</p>\n";
+  echo "<p>Drinking <span class=\"beer\">tea</span> since 2005.</p>\n";
   print_runtime();
-  echo "</div>\n"; /* end main */ 
-  echo "</body>\n";
-  echo "</html>\n";
+  echo "</footer>  \n";
 }
 
 function logged_in()
