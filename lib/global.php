@@ -16,13 +16,13 @@ error_log( $_SERVER['HTTP_USER_AGENT'] );
   
 if( $_SERVER["HTTP_HOST"] == "localhost" ||
     $_SERVER["HTTP_HOST"] == "10.0.0.10") {  
-  $BASE_URL = "http://papst/UselessPope-www/";
+  $BASE_URL = "http://papst/";
   $MAIL_FROM = "\"Johannes Paul II\" <papst@hoffer.cx>";
   $DATABASE = "papst";
   $DBPASSWD = "johannespaul";
   
 } else {    
-  $BASE_URL = "http://papst/UselessPope-www/";
+  $BASE_URL = "http://papst/";
   $MAIL_FROM = "\"Johannes Paul II\" <papst@hoffer.cx>";
   $DATABASE = "papst";
   $DBPASSWD = "johannespaul"; 
