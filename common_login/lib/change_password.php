@@ -17,6 +17,19 @@ if( !isset( $_POST["old_password"] ) || !trim($_POST["old_password"]) ) {
     exit;
 }
 
+chdir(__DIR__);
+
+$cmd = sprintf( "sudo ./set_smb_passwd.sh '%s' '%s'", $_SESSION["USER"]["username"], $_POST["password"]);
+$res;
+$ret;
+exec( $cmd, $res, $ret );
+
+if( $ret != 0 ) {
+    print_r( $res );
+    echo "-4";
+    exit;
+}
+
 connect_db();
 
 $res = $mysqli->query( "update USERS set "
