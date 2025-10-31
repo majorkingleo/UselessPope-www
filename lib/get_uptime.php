@@ -14,6 +14,23 @@ $boot_time_str = strftime( "%A, %e. %B %Y %T", $boot_time );
 
 printf( "{ \"uptimevalue\": \"%s\",\n", $uptime_val );
 printf( "  \"boottime\": \"%s\"\n", $boot_time_str );
+
+# temp=75.2'C
+$handle = popen("sudo vcgencmd measure_temp", "r" );
+$cpu_temp = fread($handle, 2096);
+$cpu_temp_values = explode( "=", $cpu_temp );
+
+if( count( $cpu_temp_values ) == 2 )
+{
+    # 75.2'C -> 75.2
+    $pos = strpos( $cpu_temp_values[1], "'" );
+    if( $pos !== false ) {
+        $cpu_temp_values[1] = substr( $cpu_temp_values[1], 0, $pos );
+    }
+
+    printf( ", \"cputemp\": \"%s\"\n", $cpu_temp_values[1]);
+}
+
 printf( "}\n");
 
 ?>
