@@ -16,7 +16,7 @@ $(function() {
     { de: "Gib deinem Pi heute seine tägliche Spannung.",
       la: "Da Pi nostro hodie voltam quotidianam." },
     { de: "Wo zwei oder drei im WLAN versammelt sind, da ist der Papst mitten unter ihnen.",
-      la: "Ubi duo vel tres in WLAN congregati sunt, ibi papa in medio eorum est." },
+      la: "Ubi duo vel tres in WLAN congregati sunt, ibi Pontifex in medio eorum est." },
     { de: "Der Segen des WLAN sei mit dir und deinem Router.",
       la: "Benedictio retis tecum et cum router tuo sit." },
     { de: "Wer im Cache sündigt, soll im Log Buße tun.",
@@ -32,7 +32,7 @@ $(function() {
     { de: "Gesegnet sei derjenige, der den Debug findet.",
       la: "Benedictus qui errorem deprehendit." },
     { de: "Der Papst gibt, der Papst nimmt.",
-      la: "Papa dat, Papa tollit." },
+      la: "Pontifex dat, Pontifex tollit." },
     { de: "Wer sein Passwort vergisst, der verliere das Himmelreich.",
       la: "Qui verbum suum obliviscitur, regnum caelorum amittit." },
     { de: "Amen ist kein Befehl, sondern eine Bestätigung.",
@@ -41,15 +41,15 @@ $(function() {
 
   function neuerSpruch() {
     const s = sprueche[Math.floor(Math.random() * sprueche.length)];
-    $("#deutsch").fadeOut(400, function() {
+    $("#deutsch").fadeOut(200, function() {
       $(this).text(s.de).fadeIn(400);
     });
-    $("#latein").fadeOut(400, function() {
+    $("#latein").fadeOut(200, function() {
       $(this).text(s.la).fadeIn(400);
     });
   }
 
   neuerSpruch();
-  setInterval(neuerSpruch, 30000);
+  setInterval(neuerSpruch, 100000);
 
 });

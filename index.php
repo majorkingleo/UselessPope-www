@@ -99,7 +99,7 @@ print_header();
      </div>
      <div class="row">
         <div class="column">Sancta Combustia:</div>
-        <div class="column"><span class="highlight" id="cputemp"></span></div>
+        <div class="column"><span class="highlight"><span id="cputemp"></span>° (Temperatur des Höllenfeuers)</span></div>
      </div>
      <div class="row">
         <div class="column">Eifrigste Gläubige:</div>
@@ -116,7 +116,7 @@ print_header();
      
     </div>
     
-  <h2>Predigtprotokoll</h2>
+  <h2>Protokoll der Predigt</h2>
     
 	<iframe src="log.htm" title="event log" height="300px"></iframe>
   

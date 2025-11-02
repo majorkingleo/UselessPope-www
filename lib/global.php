@@ -160,8 +160,8 @@ function print_footer()
 {
   echo "<footer>\n";
   echo "<div id=\"psalm\">\n";
-  echo "<p id=\"latein\">Latein.</p>\n";
-  echo "<p id=\"deutsch\">Deutsch.</p>\n";
+  echo "<p id=\"latein\">&nbsp;</p>\n";
+  echo "<p id=\"deutsch\">&nbsp;</p>\n";
   echo "</div>\n";
   echo "<div class=\"logo\">\n";
   echo "<p>Eine TK Produktion.</p>\n";
