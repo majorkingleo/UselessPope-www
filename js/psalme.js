@@ -13,7 +13,7 @@ $(function() {
       la: "Qui in rete manet, salvabitur." },
     { de: "Denn dein ist der Code, die Schleife und das Kernelreich.",
       la: "Tuum est codex, et loop, et regnum kernel." },
-    { de: "Gib deinem Pi heute seine tägliche Spannung.",
+    { de: "Gib unserem Pi heute seine tägliche Spannung.",
       la: "Da Pi nostro hodie voltam quotidianam." },
     { de: "Wo zwei oder drei im WLAN versammelt sind, da ist der Papst mitten unter ihnen.",
       la: "Ubi duo vel tres in WLAN congregati sunt, ibi Pontifex in medio eorum est." },

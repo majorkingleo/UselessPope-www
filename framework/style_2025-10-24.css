@@ -183,6 +183,7 @@ h1 {
     background-size: 200% auto;
 }
 
+footer::before,
 h2::after {
     content:"";
     width: 100%;
@@ -190,9 +191,13 @@ h2::after {
     display: block;
     position: relative;
     top: 8px;
-    background: linear-gradient(to right, #272727, #ffff00, #ff3355, #272727, #272727);
+    background: linear-gradient(to right, #303030, #ffff00, #ff3355, #303030, #303030);
     animation: rainbow_animation 3.9s linear infinite;
     background-size: 200% auto;
+}
+
+footer::before {
+    top: -15px;
 }
 
 @keyframes rainbow_animation
@@ -475,8 +480,6 @@ table.log td:nth-child(2) p span {
 
 #password .saved-ok { display: none; }
 
-
-
 /* admin */
 
 #admin a,
@@ -501,10 +504,7 @@ table.log td:nth-child(2) p span {
 /* Footer */
 
 footer {
-    margin-top: 40px;
-    padding-top: 30px;
-    border-top: 1px solid var(--textdark);
-    
+    margin-top: 60px;
 }
 
 footer p {
@@ -727,11 +727,11 @@ aside.modal-hero .text table.details td:first-child {
 	 margin-bottom: 64px;
 	 margin-left: 64px;
 	 margin-right: 64px;
-	 padding: 16px 32px;
+	 padding: 16px 32px 32px;
 	}
 
 	h1 { font-size: 57px !important; line-height: 58px; margin: 10px 0 30px; }
-	h2 { font-size: 26px !important; line-height: 26px; margin: 15px 0 15px; }
+	h2 { font-size: 26px !important; line-height: 26px; margin: 25px 0 15px; }
 	h3 { font-size: 40px !important; line-height: 40px; margin: 10px 0 20px; }
 	h4 { font-size: 20px !important; }
 	h5 { font-size: 22px !important; }
