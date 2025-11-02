@@ -525,12 +525,13 @@ footer p {
 }
 
 .beer::after {
-    content: 'beer';
+    content: 'holy beer';
+    white-space: nowrap;
     font-size: 90%;
     text-decoration: none;
     position: absolute;
     z-index: 98;
-    left: -10px;
+    left: -25px;
     top: 17px;
     padding: 2px 7px 3px 8px;
     background: var(--backgroundtext);
