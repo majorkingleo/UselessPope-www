@@ -24,7 +24,8 @@ function parse_play_data( data )
         // console.log(key, value);
         $('#' + key).children().text( value );
         $('#' + key).css("display", "block");
-        $('#' + key).click( function(){ 
+        $('#' + key).unbind("click");
+        $('#' + key).bind( "click", function(){ 
             var file_name = $(this).children().text();
             $.ajax({
                 type: "POST",
