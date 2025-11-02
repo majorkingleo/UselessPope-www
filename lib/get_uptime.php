@@ -2,6 +2,13 @@
 
 include_once( "global.php" );
 
+if( !logged_in() ) {
+    error_log( "no logged in yet" );    
+    exit;
+}
+
+connect_db();
+
 $uptime = @file_get_contents( "/proc/uptime");
 
 $uptime_val = intval($uptime);
@@ -29,6 +36,41 @@ if( count( $cpu_temp_values ) == 2 )
     }
 
     printf( ", \"cputemp\": \"%s\"\n", $cpu_temp_values[1]);
+}
+
+
+
+$sql = sprintf( "select * from STATS");
+
+$res = $mysqli->query( $sql );
+
+if( !$res ) {
+    error_log( "get_uptime.php: 1 " . $mysqli->error);
+    echo -1;
+    exit;
+}
+
+while( $STATS = $res->fetch_assoc() ) {
+    printf( ", \"%s\": \"%s\"\n", $STATS["key"], $STATS["value"] );
+}
+
+
+
+$sql = sprintf( "select * from CONFIG where `key`='brightness'");
+
+$res = $mysqli->query( $sql );
+
+if( !$res ) {
+    error_log( "get_uptime.php: 3 " . $mysqli->error);
+    echo -1;
+    exit;
+}
+
+
+$CONFIG = $res->fetch_assoc();
+
+if( $CONFIG && isset( $CONFIG["value"] ) ) {
+    printf( ", \"helligkeit\": \"%d%%\"\n", floatval($CONFIG["value"]) * 100 );
 }
 
 printf( "}\n");
