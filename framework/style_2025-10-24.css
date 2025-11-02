@@ -214,7 +214,7 @@ to {
 }
 
 button,
-input.button {
+.button {
     display: block;
     position: relative;
     cursor: pointer;
@@ -234,7 +234,7 @@ button span {
 }
 
 button::after,
-input.button::after {
+.button::after {
     position: absolute;
     content: "";
     border-radius: 0 0 var(--radius-element) var(--radius-element);
@@ -272,7 +272,7 @@ button:nth-child(6n+6)::after {
 }
 
 button:hover,
-input.button:hover {
+.button:hover {
     color: var(--textbright);
     box-shadow: 0 4px 15px rgba(0,0,0,0.25);
     transition: all .1s ease-out;
@@ -293,12 +293,18 @@ button:hover::after {
     }
 }
 
-button.audio span::before {
+XXXbutton.audio span::before {
     content:"\25B6";
     padding-right: 6px;
     font-size: 75%;
 }
 
+button#led span.aktuell::before {
+    content:"(";
+}
+button#led span.aktuell::after {
+    content:")";
+}
 
 
 /* stats */
@@ -422,10 +428,11 @@ table.log td:nth-child(2) p span {
 }
 
 
+
 /* login */
 
 .login .column:nth-child(1) {
-     width: 15%;
+     width: 18%;
      padding-top: 7px;
 }
 
@@ -452,6 +459,40 @@ table.log td:nth-child(2) p span {
 }
 
 .login input.button:hover {
+    background-image: linear-gradient(70deg, #62482E, #20aa58);
+}
+
+/* passwort ändern */
+
+#password .login .column:nth-child(1) {
+    width: 25%;
+}
+
+#password button {
+    padding: 12px 20px;
+    margin-bottom: 20px;
+}
+
+#password .saved-ok { display: none; }
+
+
+
+/* admin */
+
+#admin a,
+#password a {
+    display: inline-block;
+    text-decoration: none; 
+    font-size: 14px;
+    margin-bottom: 8px;
+}
+
+#admin button,
+#password a button {
+    padding: 8px 18px;
+}
+
+#admin .button:hover {
     background-image: linear-gradient(70deg, #62482E, #20aa58);
 }
 

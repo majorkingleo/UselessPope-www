@@ -25,13 +25,23 @@ print_header();
   
   <h1>Useless Papst</h1>
 
-  <h2>actions</h2>
+  <h2>Litaneien</h2>
   
     <div id="actions" class="grid">
   
-      <button class="party"><span>“Hallelujah!”</span></button>
-      <button class="party"><span>Weißer Rauch</span></button>
-      <button class="party"><span>Regenbogen</span></button>
+      <button class="party"><span>Lass weißen Rauch aufsteigen!</span></button>
+      <button id="led" class="party"><span>Frontbeleuchtung ändern <span class="aktuell">Regenbogen</span></span></button>
+      <button class="party"><span>Mehr Licht!</span></button>
+      <button class="party"><span>Weniger Licht!</span></button>
+      <button class="party"><span>Motorengeräusch!</span></button>
+      
+    </div>
+    
+  <h2>Psalm erklingen lassen</h2>
+    
+    <div id="actions" class="grid">
+      
+      <button class="party"><span>Sing <b>Hallelujah</b>!</span></button>
       <button class="party audio" id="sound_button_0"><span></span></button>
       <button class="party audio" id="sound_button_1"><span></span></button>
       <button class="party audio" id="sound_button_2"><span></span></button>
@@ -55,55 +65,63 @@ print_header();
       <button class="party audio" id="sound_button_20"><span></span></button>
       <button class="party audio" id="sound_button_21"><span></span></button>
       <button class="party audio" id="sound_button_22"><span></span></button>
+      <button class="party audio" id="sound_button_23"><span></span></button>
   
     </div>
   
-  <h2>stats</h2>
+  <h2>Apostelberichte</h2>
   
     <div id="stats">
     
      <div class="row">
         <div class="column">Papst ist online seit:</div>
-        <div class="column"><span class="highlight"><span id='boottime'></span></span></div>
+        <div class="column"><span class="highlight"><span id="boottime"></span></span></div>
      </div>
      <div class="row">
-        <div class="column">Uptime:</div>
-        <div class="column"><div id="uptime"><span class="hidden" id=uptimevalue>0</span><span class="highlight"></span></div></div>
+        <div class="column">Zeit seit der Schöpfung:</div>
+        <div class="column"><div id="uptime"><span class="hidden" id="uptimevalue">0</span><span class="highlight"></span></div></div>
      </div>
      <div class="row">
         <div class="column">Umdrehungen:</div>
         <div class="column"><span class="highlight"><span class="blink_me">1376</span></span></div>
      </div>
      <div class="row">
-        <div class="column">Umdrehungen pro Minute:</div>
-        <div class="column"><span class="highlight"><span class="blink_me">80</span></span></div>
+        <div class="column">Himmlische Frequenz:</div>
+        <div class="column"><span class="highlight"><span class="blink_me">80</span> Umdrehungen pro Minute</span></div>
      </div>
      <div class="row">
-        <div class="column">Aktive LEDs:</div>
+        <div class="column">Leuchtende Lichter:</div>
         <div class="column"><span class="highlight"><span id="active-leds">0500</span>/1024</span></div>
      </div>
      <div class="row">
-        <div class="column">Aktuelle Helligkeit:</div>
+        <div class="column">Illumination:</div>
         <div class="column"><span class="highlight">20%</span></div>
      </div>
      <div class="row">
-        <div class="column">Aktivste User:</div>
+        <div class="column">Eifrigste Gläubige:</div>
         <div class="column"><span class="highlight">der.mucki (97 actions)</span><br><span class="highlight">L@neTheP@in (66 actions)</span><br><span class="highlight">FatBeard (23 actions)</span></div>
      </div>
      <div class="row">
-        <div class="column">Meistgespieltester Sound:</div>
+        <div class="column">Psalm der Woche:</div>
         <div class="column"><span class="highlight">"UT3_Multikill.wav"</span></div>
      </div>
      <div class="row">
-        <div class="column">total actions:</div>
+        <div class="column">Zählung der päpstlichen Taten:</div>
         <div class="column"><span class="highlight">129</span></div>
      </div>
      
     </div>
     
-    <h2>event log</h2>
+  <h2>Predigtprotokoll</h2>
     
 	<iframe src="log.htm" title="event log" height="300px"></iframe>
+  
+  <h2>Sakristei</h2>
+  
+    <div id="admin">
+      <a href="common_login/logout.php"><button><span>Exkommunikation einleiten</span></button></a>
+      <a href="common_login/admin_myself.php"><button><span>Geheimes Zugriffswort erneuern</span></button></a>
+    </div>
   
 </main>
 

@@ -16,8 +16,19 @@ save_update_or_read_user_properties();
 
 ?>
 
-<h1>Meine Einstellungen</h1>
 
+<body lang="de" id="papst">
+
+<!-- main container -->
+<div class="w3-content w3-container" id="tk">
+
+<!-- Content -->
+
+<main>
+
+<h1>Sakristei</h1>
+
+<!--
 <form id="userdata" class="userdata">
 <fieldset>
     <legend>Name</legend>
@@ -35,20 +46,36 @@ save_update_or_read_user_properties();
     <span class="ui-state-default ui-corner-all saved-ok" id="saved_ok_userdata">gespeichert</span>
 </fieldset>
 </form>
+//-->
+
+<h2>Geheimes Zugriffswort erneuern</h2>
 
 <form id="password">
-<fieldset>
-    <legend>Passwort</legend>
-    <table>
-        <tr><td><label for="old_password">Altes Passwort:</td><td><input type="password" id="old_password" class="ui-widget ui-corner-all"/></td></tr>
-        <tr><td><label for="password1">Neues Passwort:</td><td><input type="password" id="password1" class="ui-widget ui-corner-all"/></td></tr>
-        <tr><td><label for="password2">Wiederholung:</td><td><input type="password" id="password2" class="ui-widget ui-corner-all"/></td></tr>
-    </table>
-    <br/>
-    <button id="save_password">Speichern</button>
+
+    <div class="login">
+    <form>
+    <div class="row">
+                <div class="column"><label for="old_password">Altes Zugriffswort:</label></div>
+                <div class="column"><input type="password" name="username" id="old_password" class="input"/></div>
+    </div>
+    <div class="row">
+                <div class="column"><label for="password1">Neues Zugriffswort:</label></div>
+                <div class="column"><input type="password" name="password" id="password1" class="input"/></div>
+    </div>
+    <div class="row">
+                <div class="column"><label for="password2">Wiederholung:</label></div>
+                <div class="column"><input type="password" name="password" id="password2" class="input"/></div>
+    </div>
+    <div class="row">
+                <button id="save_password"><span>Neues Zugriffswort speichern</span></button>
+    </div>
+
     <span class="ui-state-default ui-corner-all saved-ok" id="saved_ok_password">gespeichert</span>
-</fieldset>
+
+<a href="../index.php"><button><span>zurück zum Papst</span></button></a>
+
 </form>
+
 
 <script>
     
@@ -153,6 +180,14 @@ $(document).ready( function() {
 });
 </script>
 
+</main>
+
 <?php
 print_footer();
 ?>
+
+</div> <!-- main container #tk -->
+
+</body>
+
+</html>

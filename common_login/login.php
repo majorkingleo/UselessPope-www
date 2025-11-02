@@ -16,20 +16,20 @@ print_header("", "../");
   
   <h1>Useless Papst</h1>
 
-  <h2>login</h2>
+  <h2>Basilika</h2>
   
     <div class="login">
     <form>
     <div class="row">
-                <div class="column"><label for="username">Benutzername:</label></div>
+                <div class="column"><label for="username">Gläubigername:</label></div>
                 <div class="column"><input type="text" name="username" id="username" class="input"/></div>
     </div>
     <div class="row">
-                <div class="column"><label for="password">Passwort:</label></div>
+                <div class="column"><label for="password">Zugriffswort:</label></div>
                 <div class="column"><input type="password" name="password" id="password" class="input"/></div>
     </div>
     <div class="row">
-                <div class="column"><input type="submit" name="submit" class="button ui-button ui-button-text-only ui-widget ui-state-default ui-corner-all" id="submit_btn" value="Anmelden"/></div>
+                <div class="column"><input type="submit" name="submit" class="button ui-button ui-button-text-only ui-widget ui-state-default ui-corner-all" id="submit_btn" value="Beitreten"/></div>
     </div>
     </form>
     </div>
