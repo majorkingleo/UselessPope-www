@@ -517,9 +517,11 @@ footer #psalm p#latein {
     font-weight: bold;
 }
 
-footer #psalm p#deutsch {
+footer #psalm p#deutsch,
+footer #psalm p#evangelium {
     font-size: 14px;
-    font-style: italic ;
+    font-style: italic;
+    margin-bottom: 8px;
 }
 
 footer .logo {

@@ -39,13 +39,27 @@ $(function() {
       la: "Amen non mandatum est, sed confirmatio." }
   ];
 
+  // Kapitel/Vers erzeugen: Kapitel 1–12, Vers 0–59
+  function evangeliumVonPi() {
+    const kapitel = Math.floor(Math.random() * 12) + 1;     // 1..12
+    const vers = Math.floor(Math.random() * 60);            // 0..59
+    return `— Evangelium von Pi ${kapitel}:${vers}`;
+  }
+
   function neuerSpruch() {
     const s = sprueche[Math.floor(Math.random() * sprueche.length)];
+    const ev = evangeliumVonPi();
+
+    $("#latein").fadeOut(200, function() {
+      $(this).text(s.la).fadeIn(400);
+    });
+
     $("#deutsch").fadeOut(200, function() {
       $(this).text(s.de).fadeIn(400);
     });
-    $("#latein").fadeOut(200, function() {
-      $(this).text(s.la).fadeIn(400);
+
+    $("#evangelium").fadeOut(200, function() {
+      $(this).text(ev).fadeIn(400);
     });
   }
 

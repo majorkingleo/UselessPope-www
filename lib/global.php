@@ -162,6 +162,7 @@ function print_footer()
   echo "<div id=\"psalm\">\n";
   echo "<p id=\"latein\">&nbsp;</p>\n";
   echo "<p id=\"deutsch\">&nbsp;</p>\n";
+  echo "<p id=\"evangelium\">&nbsp;</p>\n";
   echo "</div>\n";
   echo "<div class=\"logo\">\n";
   echo "<p>Eine TK Produktion.</p>\n";
