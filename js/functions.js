@@ -1,52 +1,64 @@
 
+function parse_uptime_data( data ) 
+{            
+    var arr = $.parseJSON( data );
+    for( var key in arr ) {
+        var value = arr[key];
+        // console.log(key, value);
+        $('#' + key).text( value );
+    }   
+}
+
+function fetch_uptime_data()
+{
+    $.get( "lib/get_uptime.php", parse_uptime_data );
+}
+
+
+function parse_play_data( data ) 
+{            
+    var arr = $.parseJSON( data );
+    var idx = 0;
+    for( var key in arr ) {
+        var value = arr[key];
+        // console.log(key, value);
+        $('#' + key).children().text( value );
+        $('#' + key).css("display", "block");
+        $('#' + key).click( function(){ 
+            var file_name = $(this).children().text();
+            $.ajax({
+                type: "POST",
+                url: "lib/play_file.php",
+                data: "file=" + encodeURIComponent(file_name)
+            });
+        });
+
+        // get XX from sound_button_XX
+        const components = key.split("_");                        
+        if( components.length == 3 ) {                            
+            idx = parseInt(components[2]);
+        }
+    }
+
+    for( var i = idx + 1; i < 100; ++i ) {                        
+        $('#sound_button_' + i).css("display", "none");
+    }
+}
+
+function fetch_play_data( data )
+{
+    $.get( "lib/get_sound_files.php", parse_play_data );
+}
+
 $(document).ready(function() {
    
         if( $("#uptime").length )
         {
-            setInterval( function() {
-            $.get( "lib/get_uptime.php", function( data ) {            
-                    var arr = $.parseJSON( data );
-                    for( var key in arr ) {
-                        var value = arr[key];
-                        // console.log(key, value);
-                        $('#' + key).text( value );
-                    }
-                    
-                    });
-            }, 1000 );
+            setInterval( fetch_uptime_data, 1000 );
+            fetch_uptime_data();
 
-
-            setInterval( function() {
-            $.get( "lib/get_sound_files.php", function( data ) {            
-                    var arr = $.parseJSON( data );
-                    var idx = 0;
-                    for( var key in arr ) {
-                        var value = arr[key];
-                        // console.log(key, value);
-                        $('#' + key).children().text( value );
-                        $('#' + key).css("display", "block");
-                        $('#' + key).click( function(){ 
-                            var file_name = $(this).children().text();
-                            $.ajax({
-                                type: "POST",
-                                url: "lib/play_file.php",
-                                data: "file=" + encodeURIComponent(file_name)
-                            });
-                        });
-
-                        // get XX from sound_button_XX
-                        const components = key.split("_");                        
-                        if( components.length == 3 ) {                            
-                            idx = parseInt(components[2]);
-                        }
-                    }
-
-                    for( var i = idx + 1; i < 100; ++i ) {                        
-                        $('#sound_button_' + i).css("display", "none");
-                    }
-                    
-                    });
-            }, 1000 );
+            setInterval( fetch_play_data, 1000 );
+            fetch_play_data();
         }
 });
 
