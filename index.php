@@ -30,7 +30,7 @@ print_header();
     <div id="actions" class="grid">
   
       <button class="party"><span>Lass weißen Rauch aufsteigen!</span></button>
-      <button id="led" class="party"><span>Frontbeleuchtung ändern <span class="aktuell">Regenbogen</span></span></button>
+      <button id="led" class="party"><span>Beleuchtung ändern <span id="aktuell">Regenbogen</span></span></button>
       <button class="party"><span>Mehr Licht!</span></button>
       <button class="party"><span>Weniger Licht!</span></button>
       <button class="party"><span>Motorengeräusch!</span></button>
@@ -91,14 +91,14 @@ print_header();
      </div>
      <div class="row">
         <div class="column">Leuchtende Lichter:</div>
-        <div class="column"><span class="highlight"><span id="active-leds">0500</span>/1024</span></div>
+        <div class="column"><span class="highlight"><span id="active-leds"></span>/1024</span><span class="hidden" id="active-leds-data">0</span></div>
      </div>
      <div class="row">
         <div class="column">Illumination:</div>
         <div class="column"><span class="highlight" id="helligkeit">20%</span></div>
      </div>
      <div class="row">
-        <div class="column">CPU Temp:</div>
+        <div class="column">Sancta Combustia:</div>
         <div class="column"><span class="highlight" id="cputemp"></span></div>
      </div>
      <div class="row">
@@ -110,7 +110,7 @@ print_header();
         <div class="column"><span class="highlight" id="mostplayedsound">"UT3_Multikill.wav"</span></div>
      </div>
      <div class="row">
-        <div class="column">Zählung der päpstlichen Taten:</div>
+        <div class="column">Zählung der pontifikalen Taten:</div>
         <div class="column"><span class="highlight" id="totalactions">129</span></div>
      </div>
      
@@ -284,7 +284,11 @@ window.addEventListener('popstate', event => {
   };
 
   // ---- demo server updates every 10s (remove in production) ----
-  setInterval(() => window.updateActiveLeds(Math.floor(Math.random() * 1025)), 10000);
+  //setInterval(() => window.updateActiveLeds(Math.floor(Math.random() * 1025)), 10000);
+  setInterval(() => {
+    var current_active_leds = $( "#active-leds-data" ).text();
+    window.updateActiveLeds(current_active_leds);
+  }, 10000);
 })();
 
 

@@ -16,7 +16,7 @@ print_header("", "../");
   
   <h1>Useless Papst</h1>
 
-  <h2>Basilika</h2>
+  <h2>Dem Papst die Treue schwören</h2>
   
     <div class="login">
     <form>

@@ -67,12 +67,12 @@ save_update_or_read_user_properties();
                 <div class="column"><input type="password" name="password" id="password2" class="input"/></div>
     </div>
     <div class="row">
-                <button id="save_password"><span>Neues Zugriffswort speichern</span></button>
+                <button id="save_password"><span>Neues Zugriffswort übernehmen</span></button>
     </div>
 
     <span class="ui-state-default ui-corner-all saved-ok" id="saved_ok_password">gespeichert</span>
 
-<a href="../index.php"><button><span>zurück zum Papst</span></button></a>
+<a href="../index.php" class="button"><span>kehre zurück zum Papst</span></a>
 
 </form>
 

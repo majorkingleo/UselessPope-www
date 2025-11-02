@@ -159,10 +159,16 @@ function debug_runtime( $info = "")
 function print_footer()
 {
   echo "<footer>\n";
+  echo "<div id=\"psalm\">\n";
+  echo "<p id=\"deutsch\">Deutsch.</p>\n";
+  echo "<p id=\"latein\">Latein.</p>\n";
+  echo "</div>\n";
+  echo "<div class=\"logo\">\n";
   echo "<p>Eine TK Produktion.</p>\n";
   echo "<p>Drinking <span class=\"beer\">tea</span> since 2005.</p>\n";
+  echo "</div>\n";
   print_runtime();
-  echo "</footer>  \n";
+  echo "</footer>\n";
 }
 
 function logged_in()
