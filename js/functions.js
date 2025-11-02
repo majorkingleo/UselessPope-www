@@ -13,7 +13,7 @@ $(document).ready(function() {
                     }
                     
                     });
-            }(), 1000 );
+            }, 1000 );
 
 
             setInterval( function() {
@@ -46,7 +46,7 @@ $(document).ready(function() {
                     }
                     
                     });
-            }(), 1000 );
+            }, 1000 );
         }
 });
 
