@@ -39,10 +39,10 @@ $(function() {
       la: "Amen non mandatum est, sed confirmatio." }
   ];
 
-  // Kapitel/Vers erzeugen: Kapitel 1–12, Vers 0–59
+  // Kapitel/Vers erzeugen: Kapitel 1–12, Vers 1–59
   function evangeliumVonPi() {
     const kapitel = Math.floor(Math.random() * 12) + 1;     // 1..12
-    const vers = Math.floor(Math.random() * 60);            // 0..59
+    const vers = Math.floor(Math.random() * 59) + 1;        // 1..59
     return `— Evangelium von Pi ${kapitel}:${vers}`;
   }
 

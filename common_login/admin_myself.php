@@ -28,32 +28,12 @@ save_update_or_read_user_properties();
 
 <h1>Sakristei</h1>
 
-<!--
-<form id="userdata" class="userdata">
-<fieldset>
-    <legend>Name</legend>
-    <table>
-        <tr><td><label for="title">Titel:</td><td><input type="text" id="my_title" class="ui-widget ui-corner-all" 
-                                                              value="<?php echo htmlspecialchars($_SESSION["USERPROPERTIES"]["title"]);?>"/></td></tr>
-        
-        <tr><td><label for="forename">Vorname:</td><td><input type="text" id="forename" class="ui-widget ui-corner-all" 
-                                                              value="<?php echo htmlspecialchars($_SESSION["USERPROPERTIES"]["forename"]);?>"/></td></tr>
-        <tr><td><label for="surename">Nachname:</td><td><input type="text" id="surename" class="ui-widget ui-corner-all"
-                                                              value="<?php echo htmlspecialchars($_SESSION["USERPROPERTIES"]["surename"]);?>"/></td></tr>
-    </table>
-    <br/>
-    <button id="save_userdata">Speichern</button>
-    <span class="ui-state-default ui-corner-all saved-ok" id="saved_ok_userdata">gespeichert</span>
-</fieldset>
-</form>
-//-->
-
 <h2>Geheimes Zugriffswort erneuern</h2>
 
 <form id="password">
 
-    <div class="login">
-    <form>
+  <div class="login">
+
     <div class="row">
                 <div class="column"><label for="old_password">Altes Zugriffswort:</label></div>
                 <div class="column"><input type="password" name="username" id="old_password" class="input"/></div>
@@ -71,8 +51,10 @@ save_update_or_read_user_properties();
     </div>
 
     <span class="ui-state-default ui-corner-all saved-ok" id="saved_ok_password">gespeichert</span>
+    
+    <a href="../index.php" class="button"><span>kehre zurück zum Papst</span></a>
 
-<a href="../index.php" class="button"><span>kehre zurück zum Papst</span></a>
+  </div>
 
 </form>
 

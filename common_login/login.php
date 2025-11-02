@@ -1,4 +1,5 @@
 <?php
+
 require_once( '../lib/global.php' );
 
 print_header("", "../");
@@ -14,11 +15,12 @@ print_header("", "../");
 
 <main>
   
-  <h1>Useless Papst</h1>
+<h1>Useless Papst</h1>
 
-  <h2>Dem Papst die Treue schwören</h2>
+<h2>Dem Papst die Treue schwören</h2>
   
-    <div class="login">
+  <div class="login">
+
     <form>
     <div class="row">
                 <div class="column"><label for="username">Gläubigername:</label></div>
@@ -32,7 +34,9 @@ print_header("", "../");
                 <div class="column"><input type="submit" name="submit" class="button ui-button ui-button-text-only ui-widget ui-state-default ui-corner-all" id="submit_btn" value="Beitreten"/></div>
     </div>
     </form>
-    </div>
+
+  </div>
+
 
 <script>
     $(document).ready(function() {
