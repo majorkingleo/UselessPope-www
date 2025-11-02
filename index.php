@@ -83,11 +83,11 @@ print_header();
      </div>
      <div class="row">
         <div class="column">Umdrehungen:</div>
-        <div class="column"><span class="highlight"><span class="blink_me">1376</span></span></div>
+        <div class="column"><span class="highlight"><span class="blink_me" id="umdrehungen">1376</span></span></div>
      </div>
      <div class="row">
         <div class="column">Himmlische Frequenz:</div>
-        <div class="column"><span class="highlight"><span class="blink_me">80</span> Umdrehungen pro Minute</span></div>
+        <div class="column"><span class="highlight"><span class="blink_me" id="frequenz">80</span> Umdrehungen pro Minute</span></div>
      </div>
      <div class="row">
         <div class="column">Leuchtende Lichter:</div>
@@ -95,19 +95,23 @@ print_header();
      </div>
      <div class="row">
         <div class="column">Illumination:</div>
-        <div class="column"><span class="highlight">20%</span></div>
+        <div class="column"><span class="highlight" id="helligkeit">20%</span></div>
+     </div>
+     <div class="row">
+        <div class="column">CPU Temp:</div>
+        <div class="column"><span class="highlight" id="cputemp"></span></div>
      </div>
      <div class="row">
         <div class="column">Eifrigste Gläubige:</div>
-        <div class="column"><span class="highlight">der.mucki (97 actions)</span><br><span class="highlight">L@neTheP@in (66 actions)</span><br><span class="highlight">FatBeard (23 actions)</span></div>
+        <div class="column"><span class="highlight" id="user1">der.mucki (97 actions)</span><br><span class="highlight" id="user2">L@neTheP@in (66 actions)</span><br><span class="highlight" id="user3">FatBeard (23 actions)</span></div>
      </div>
      <div class="row">
         <div class="column">Psalm der Woche:</div>
-        <div class="column"><span class="highlight">"UT3_Multikill.wav"</span></div>
+        <div class="column"><span class="highlight" id="mostplayedsound">"UT3_Multikill.wav"</span></div>
      </div>
      <div class="row">
         <div class="column">Zählung der päpstlichen Taten:</div>
-        <div class="column"><span class="highlight">129</span></div>
+        <div class="column"><span class="highlight" id="totalactions">129</span></div>
      </div>
      
     </div>
