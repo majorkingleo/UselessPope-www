@@ -311,9 +311,9 @@ window.addEventListener('popstate', event => {
     const minutes = totalMinutes;
 
     const parts = [];
-    if (days > 0) parts.push(`${days} day${days !== 1 ? "s" : ""}`);
-    if (hours > 0) parts.push(`${hours} hour${hours !== 1 ? "s" : ""}`);
-    parts.push(`${minutes} minute${minutes !== 1 ? "s" : ""}`);
+    if (days > 0) parts.push(`${days} Tag${days !== 1 ? "e" : ""}`);
+    if (hours > 0) parts.push(`${hours} Stunde${hours !== 1 ? "n" : ""}`);
+    parts.push(`${minutes} Minute${minutes !== 1 ? "n" : ""}`);
 
     return parts.join(", ");
   };
