@@ -118,7 +118,7 @@ print_header();
     
   <h2>Protokoll der Predigt</h2>
     
-	<iframe src="log.htm" title="event log" height="300px"></iframe>
+	<iframe src="log.php" title="event log" height="300px"></iframe>
   
   <h2>Sakristei</h2>
   
