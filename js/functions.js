@@ -83,7 +83,14 @@ $(document).ready(function() {
                     url: "lib/play_file.php",
                     data: "file=" + encodeURIComponent("/home/papst/audio_motor/electric-train-engine-noise-393082.mp3")
                 });
-            } );                 
+            } );
+            
+            $("#led").click( function() {
+                $.ajax({
+                    type: "POST",
+                    url: "lib/change_animation.php"
+                });
+            } );  
         }
 });
 
