@@ -60,6 +60,22 @@ $(document).ready(function() {
 
             setInterval( fetch_play_data, 1000 );
             fetch_play_data();
+
+            $("#inclight").click( function() {
+                $.ajax({
+                    type: "GET",
+                    url: "lib/change_brightness.php",
+                    data: "incbrightness=0.02"
+                });
+            } );
+
+            $("#declight").click( function() {
+                $.ajax({
+                    type: "GET",
+                    url: "lib/change_brightness.php",
+                    data: "incbrightness=-0.02"
+                });
+            } );            
         }
 });
 
