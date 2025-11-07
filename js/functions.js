@@ -91,6 +91,13 @@ $(document).ready(function() {
                     url: "lib/change_animation.php"
                 });
             } );  
+
+            $("#fog").click( function() {
+                $.ajax({
+                    type: "POST",
+                    url: "lib/change_fog.php"
+                });
+            } );              
         }
 });
 
