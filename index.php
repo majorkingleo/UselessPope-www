@@ -33,7 +33,7 @@ print_header();
       <button id="led" class="party"><span>Beleuchtung ändern <span id="aktuell">Regenbogen</span></span></button>
       <button class="party" id="inclight"><span>Mehr Licht!</span></button>
       <button class="party" id="declight"><span>Weniger Licht!</span></button>
-      <button class="party"><span>Motorengeräusch!</span></button>
+      <button class="party" id="playmotor"><span>Motorengeräusch!</span></button>
       
     </div>
     
