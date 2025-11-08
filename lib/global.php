@@ -1,5 +1,6 @@
 <?php
 require_once(dirname(__FILE__) . "/../common_login/lib/user_rights.php");
+require_once(dirname(__FILE__) . "/lines_of_code.php");
 
 date_default_timezone_set('Europe/Vienna');
 
@@ -152,6 +153,36 @@ function debug_runtime( $info = "")
   error_log( sprintf("%.03f sec $info", microtime_float() - $starttime) ); 
 }
 
+function total_lines_of_code()
+{
+  global $lines_of_code;
+
+  $all = 0;
+
+  foreach( $lines_of_code as $lines ) {
+    $all += $lines;
+  }
+
+  return $all;
+}
+
+function print_lines_of_code()
+{
+  global $lines_of_code;
+
+  echo "<span class=\"lines_of_code\">";
+  echo "<span>Lineae codicis quae necessariae erant ad Papam manifestandum.</span>";
+  echo "<table>";
+  echo "<tr><td>C++</td><td>"               . $lines_of_code["broker"]  . "</td></tr>";
+  echo "<tr><td>Python</td><td>"            . $lines_of_code["python"]  . "</td></tr>";
+  echo "<tr><td>PHP/CSS/HTML/JS</td><td>"   . $lines_of_code["php"]  + $lines_of_code["web"]  . "</td></tr>";
+  echo "<tr><td>arduino</td><td>"           . $lines_of_code["arduino"] . "</td></tr>";
+  echo "<tr><td>total</td><td>"             . total_lines_of_code()     . "</td></tr>";
+  echo "</table>";
+  echo "</table>";
+  echo "</span>";
+}
+
 function print_footer()
 {
   echo "<footer>\n";
@@ -165,6 +196,7 @@ function print_footer()
   echo "<p>Drinking <span class=\"beer\">tea</span> since 2005.</p>\n";
   echo "</div>\n";
   print_runtime();
+  print_lines_of_code();
   echo "</footer>\n";
   echo "<script src=\"../js/psalme.js\"></script>\n";
 }
