@@ -41,7 +41,7 @@ print_header();
     
     <div id="actions" class="grid">
       
-      <button class="party"><span>Sing <b>Hallelujah</b>!</span></button>
+      <button class="party" id="playhallelujah"><span>Sing <b>Hallelujah</b>!</span></button>
       <button class="party audio" id="sound_button_0"><span></span></button>
       <button class="party audio" id="sound_button_1"><span></span></button>
       <button class="party audio" id="sound_button_2"><span></span></button>

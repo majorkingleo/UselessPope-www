@@ -97,7 +97,15 @@ $(document).ready(function() {
                     type: "POST",
                     url: "lib/change_fog.php"
                 });
-            } );              
+            } );     
+            
+            $("#playhallelujah").click( function() {
+                $.ajax({
+                    type: "POST",
+                    url: "lib/play_file.php",
+                    data: "file=" + encodeURIComponent("/home/papst/audio_music/Worms - HOLYGRENADE.WAV")
+                });
+            } );
         }
 });
 
