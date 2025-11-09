@@ -173,10 +173,10 @@ function print_lines_of_code()
   echo "<span class=\"lines_of_code\">";
   echo "<span>Lineae codicis quae necessariae erant ad Papam manifestandum.</span>";
   echo "<table>";
-  echo "<tr><td>C++</td><td>"               . $lines_of_code["broker"]  . "</td></tr>";
-  echo "<tr><td>Python</td><td>"            . $lines_of_code["python"]  . "</td></tr>";
-  echo "<tr><td>PHP/CSS/HTML/JS</td><td>"   . $lines_of_code["php"]  + $lines_of_code["web"]  . "</td></tr>";
-  echo "<tr><td>arduino</td><td>"           . $lines_of_code["arduino"] . "</td></tr>";
+  echo "<tr><td><a href=\"https://github.com/majorkingleo/UselessPope-Broker\">C++</a></td><td>"           . $lines_of_code["broker"]  . "</td></tr>";
+  echo "<tr><td><a href=\"https://github.com/majorkingleo/UselessPope-raspi\">Python</a></td><td>"         . $lines_of_code["python"]  . "</td></tr>";
+  echo "<tr><td><a href=\"https://github.com/majorkingleo/UselessPope-www\">PHP/CSS/HTML/JS</a></td><td>"  . $lines_of_code["php"]  + $lines_of_code["web"]  . "</td></tr>";
+  echo "<tr><td><a href=\"https://github.com/majorkingleo/UselessPope-RemoteButton\">arduino</a></td><td>" . $lines_of_code["arduino"] . "</td></tr>";
   echo "<tr><td>total</td><td>"             . total_lines_of_code()     . "</td></tr>";
   echo "</table>";
   echo "</table>";
