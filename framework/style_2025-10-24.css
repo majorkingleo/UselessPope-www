@@ -555,6 +555,45 @@ footer .logo {
     transform: rotate(-7deg);
 }
 
+/* lines of code */
+
+.lines_of_code span {
+    display: block;
+    margin: 40px 0 7px;
+    font-size: 14px;
+}
+
+.lines_of_code table {
+    position: relative;
+    left: -7px;
+}
+
+.lines_of_code table,
+.lines_of_code table * {
+    margin: 0;
+    padding: 0;
+    border-spacing: 0px;
+    font-size: 12px;
+}
+
+.lines_of_code table tr:hover td {
+    background: var(--backgroundtext);
+}
+
+.lines_of_code table td {
+    padding: 2px 7px;
+}
+
+.lines_of_code table td:first-child {
+    padding-right: 10px;
+    border-radius: var(--radius-element) 0 0 var(--radius-element);
+}
+
+.lines_of_code table td:last-child {
+    text-align: right;
+    border-radius: 0 var(--radius-element) var(--radius-element) 0;
+}
+
 
 
 /* divider */
