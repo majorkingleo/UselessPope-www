@@ -54,8 +54,6 @@ while( $STATS = $res->fetch_assoc() ) {
     printf( ", \"%s\": \"%s\"\n", $STATS["key"], $STATS["value"] );
 }
 
-
-
 $sql = sprintf( "select * from CONFIG where `key`='brightness'");
 
 $res = $mysqli->query( $sql );

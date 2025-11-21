@@ -191,12 +191,13 @@ function print_footer()
   echo "<p id=\"deutsch\">&nbsp;</p>\n";
   echo "<p id=\"evangelium\">&nbsp;</p>\n";
   echo "</div>\n";
+  print_lines_of_code();
   echo "<div class=\"logo\">\n";
   echo "<p>Eine TK Produktion.</p>\n";
   echo "<p>Drinking <span class=\"beer\">tea</span> since 2005.</p>\n";
   echo "</div>\n";
   print_runtime();
-  print_lines_of_code();
+  
   echo "</footer>\n";
   echo "<script src=\"../js/psalme.js\"></script>\n";
 }

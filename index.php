@@ -66,6 +66,9 @@ print_header();
       <button class="party audio" id="sound_button_21"><span></span></button>
       <button class="party audio" id="sound_button_22"><span></span></button>
       <button class="party audio" id="sound_button_23"><span></span></button>
+      <button class="party audio" id="sound_button_24"><span></span></button>
+      <button class="party audio" id="sound_button_25"><span></span></button>
+      <button class="party audio" id="sound_button_26"><span></span></button>
   
     </div>
   
@@ -118,7 +121,7 @@ print_header();
     
   <h2>Protokoll der Predigt</h2>
     
-	<iframe src="log.php" title="event log" height="300px"></iframe>
+	<iframe src="log.php" title="event log" id="eventlog" height="300px"></iframe>
   
   <h2>Sakristei</h2>
   
@@ -340,6 +343,16 @@ window.addEventListener('popstate', event => {
   observer.observe(hidden, { childList: true, characterData: true, subtree: true });
 
 })();
+
+
+
+// reload iFrame
+
+  setInterval(() => {
+    const f = document.getElementById("eventlog");
+    if (f) f.src = f.src;     // reassigning the same src forces a reload
+  }, 60000); // 60 seconds
+
 
 
 </script>
