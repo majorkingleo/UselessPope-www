@@ -30,10 +30,9 @@ print_header();
     <div id="actions" class="grid">
   
       <button class="party" id="fog"><span>Lass weißen Rauch aufsteigen!</span></button>
-      <button class="party" id="led"><span>Beleuchtung ändern <span id="aktuell">Regenbogen</span></span></button>
+      <button class="party" id="led"><span>Beleuchtung ändern <span !id="aktuell"></span></span></button>
       <button class="party" id="inclight"><span>Mehr Licht!</span></button>
       <button class="party" id="declight"><span>Weniger Licht!</span></button>
-      <button class="party" id="playmotor"><span>Motorengeräusch!</span></button>
       
     </div>
     
@@ -42,6 +41,7 @@ print_header();
     <div id="actions" class="grid">
       
       <button class="party" id="playhallelujah"><span>Sing <b>Hallelujah</b>!</span></button>
+      <button class="party" id="playmotor"><span>Motorengeräusch!</span></button>
       <button class="party audio" id="sound_button_0"><span></span></button>
       <button class="party audio" id="sound_button_1"><span></span></button>
       <button class="party audio" id="sound_button_2"><span></span></button>
@@ -69,6 +69,9 @@ print_header();
       <button class="party audio" id="sound_button_24"><span></span></button>
       <button class="party audio" id="sound_button_25"><span></span></button>
       <button class="party audio" id="sound_button_26"><span></span></button>
+      <button class="party audio" id="sound_button_27"><span></span></button>
+      <button class="party audio" id="sound_button_28"><span></span></button>
+      <button class="party audio" id="sound_button_29"><span></span></button>
   
     </div>
   

@@ -7,7 +7,7 @@ function get_config( $key )
     $res = $mysqli->query( sprintf( "select * from CONFIG where `key`='%s'", $key ) );
 
     if( !$res ) {
-        error_log( "change_animation.php: 2 " . $mysqli->error);
+        error_log( "change_fog.php: 2 " . $mysqli->error);
         echo -2;
         exit;
     }
@@ -50,7 +50,12 @@ if( $current_fog === false ) {
 
 $fog = !intval($current_fog);
 
-$sql = sprintf( "update CONFIG set `value` = '%d' where `key` = 'fog'", $fog );
+$sql = sprintf( "update CONFIG set `value` = '%d', " .
+                "`hist_ae_zeit` = CURRENT_TIMESTAMP(), " .
+                " `hist_ae_user`='%s' where `key` = 'fog'",
+                $fog,
+                 addslashes($_SESSION["USER"]["username"]) );
+
 $res = $mysqli->query( $sql );
 
 if( !$res ) {

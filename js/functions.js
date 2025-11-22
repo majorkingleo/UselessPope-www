@@ -81,7 +81,7 @@ $(document).ready(function() {
                 $.ajax({
                     type: "POST",
                     url: "lib/play_file.php",
-                    data: "file=" + encodeURIComponent("/home/papst/audio_motor/electric-train-engine-noise-393082.mp3")
+                    data: "file=" + encodeURIComponent("/home/papst/audio_motor/Humvee_Idle.mp3")
                 });
             } );
             
