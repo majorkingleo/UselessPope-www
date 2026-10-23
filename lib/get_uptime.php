@@ -71,6 +71,23 @@ if( $CONFIG && isset( $CONFIG["value"] ) ) {
     printf( ", \"helligkeit\": \"%d%%\"\n", floatval($CONFIG["value"]) * 100 );
 }
 
+# current scroll text (Magnificat), so open clients can sync their input field
+$sql = sprintf( "select * from CONFIG where `key`='scroll_text'");
+
+$res = $mysqli->query( $sql );
+
+if( !$res ) {
+    error_log( "get_uptime.php: 4 " . $mysqli->error);
+    echo -1;
+    exit;
+}
+
+$SCROLL = $res->fetch_assoc();
+
+if( $SCROLL && isset( $SCROLL["value"] ) ) {
+    printf( ", \"scroll_text\": %s\n", json_encode( $SCROLL["value"] ) );
+}
+
 printf( "}\n");
 
 ?>

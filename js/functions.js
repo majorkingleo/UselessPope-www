@@ -1,10 +1,36 @@
 
+var banner_dirty = false;
+var banner_synced_value = null;
+
+function update_banner_field( value )
+{
+    var input = $("#banner");
+    if( !input.length )
+        return;
+
+    if( banner_synced_value === null )
+        banner_synced_value = input.val();
+
+    // Don't overwrite while the user is editing or has unsaved changes.
+    if( document.activeElement === input[0] || banner_dirty )
+        return;
+
+    if( banner_synced_value !== value ) {
+        input.val( value );
+        banner_synced_value = value;
+    }
+}
+
 function parse_uptime_data( data ) 
 {            
     var arr = $.parseJSON( data );
     for( var key in arr ) {
         var value = arr[key];
         // console.log(key, value);
+        if( key === "scroll_text" ) {
+            update_banner_field( value );
+            continue;
+        }
         $('#' + key).text( value );
     }   
 }
@@ -108,10 +134,16 @@ $(document).ready(function() {
             } );
 
             function save_banner() {
+                var value = $("#banner").val();
+
                 $.ajax({
                     type: "POST",
                     url: "lib/save_scroll_text.php",
-                    data: "scroll_text=" + encodeURIComponent($("#banner").val())
+                    data: "scroll_text=" + encodeURIComponent(value),
+                    success: function() {
+                        banner_dirty = false;
+                        banner_synced_value = value;
+                    }
                 });
             }
 
@@ -123,6 +155,15 @@ $(document).ready(function() {
                     save_banner();
                 }
             } );
+
+            // Remember the server value and flag unsaved edits so the polling
+            // sync doesn't overwrite what the user is typing.
+            if( $("#banner").length ) {
+                banner_synced_value = $("#banner").val();
+                $("#banner").on("input", function() {
+                    banner_dirty = true;
+                });
+            }
         }
 });
 
