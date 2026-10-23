@@ -107,7 +107,7 @@ echo "<meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">\n
 echo "<title>" . $SITE_NAME . "</title>\n";
 echo "<meta http-equiv=\"Content-Script-Type\" content=\"text/javascript\">\n";
 echo "<link rel=\"stylesheet\" type=\"text/css\" href=\"" . $rel . "framework/w3.css\">\n";
-echo "<link rel=\"stylesheet\" type=\"text/css\" href=\"" . $rel . "framework/style_2025-10-24.css\">\n";
+echo "<link rel=\"stylesheet\" type=\"text/css\" href=\"" . $rel . "framework/style_2026-10-23.css\">\n";
 echo "<script src=\"" . $rel . "framework/jquery-3.7.1.js\"></script>\n";
 echo "<script src=\"" . $rel . "framework/jquery-ui-1.14.1/jquery-ui.min.js\"></script>\n";
 echo "<script src=\"" . $rel . "framework/party-2.2.0.min.js\"></script>\n";

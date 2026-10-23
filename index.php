@@ -11,6 +11,16 @@ if( !logged_in() )
 }
 
 print_header();
+
+connect_db();
+$scroll_text = "LAN 2.1"; // fallback default if not yet stored in DB
+$res = $mysqli->query( "select * from CONFIG where `key`='scroll_text'" );
+if( $res ) {
+    $row = $res->fetch_assoc();
+    if( $row && isset( $row["value"] ) ) {
+        $scroll_text = $row["value"];
+    }
+}
 ?>
 
 
@@ -34,6 +44,15 @@ print_header();
       <button class="party" id="inclight"><span>Mehr Licht!</span></button>
       <button class="party" id="declight"><span>Weniger Licht!</span></button>
       
+    </div>
+  
+  <h2>Magnificat</h2>
+  
+    <div class="login banner">
+    <div class="row">
+                <div class="column"><input type="text" name="banner" id="banner" class="input" value="<?php echo htmlspecialchars( $scroll_text, ENT_QUOTES, 'UTF-8' ); ?>"/></div>
+                <div class="column"><button id="save_banner"><span>Neues Magnificat anzeigen</span></button></div>
+    </div>
     </div>
     
   <h2>Psalm erklingen lassen</h2>

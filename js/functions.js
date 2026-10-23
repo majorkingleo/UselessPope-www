@@ -106,6 +106,14 @@ $(document).ready(function() {
                     data: "file=" + encodeURIComponent("/home/papst/audio_music/Worms - HOLYGRENADE.WAV")
                 });
             } );
+
+            $("#save_banner").click( function() {
+                $.ajax({
+                    type: "POST",
+                    url: "lib/save_scroll_text.php",
+                    data: "scroll_text=" + encodeURIComponent($("#banner").val())
+                });
+            } );
         }
 });
 
