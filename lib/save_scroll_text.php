@@ -55,11 +55,38 @@ function save_config_value( $mysqli, $key, $value )
     return true;
 }
 
+/**
+ * Read a single CONFIG value. Returns null when the key is missing.
+ */
+function get_config_value( $mysqli, $key )
+{
+    $key = addslashes($key);
+
+    $res = $mysqli->query( "select * from CONFIG where `key`='{$key}'" );
+    if( !$res ) {
+        error_log( "save_scroll_text.php: select {$key} " . $mysqli->error );
+        return null;
+    }
+
+    $row = $res->fetch_assoc();
+    if( $row === null || $row === false ) {
+        return null;
+    }
+
+    return $row["value"];
+}
+
 // The Magnificat text is displayed by text_scroll.py via CONFIG `scroll_text`.
 // Keep the text-scroll animation's title (`animation5_title`) in sync so the
 // animation listing / web UI reflect the new message too.
-$ok  = save_config_value( $mysqli, "scroll_text",     $scroll_text );
+$ok  = save_config_value( $mysqli, "scroll_text",      $scroll_text );
 $ok  = save_config_value( $mysqli, "animation5_title", $scroll_text ) && $ok;
+
+// Make sure the text-scroll animation (index 5) is the active one, so the new
+// message actually shows up. Only switch when it isn't already 5.
+if( intval( get_config_value( $mysqli, "current_animation" ) ) !== 5 ) {
+    $ok = change_animation_to( 5 ) && $ok;
+}
 
 if( !$ok ) {
     echo -2;

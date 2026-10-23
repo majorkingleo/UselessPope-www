@@ -50,38 +50,17 @@ if( $current_animation === false ) {
 
 $animation = intval($current_animation) + 1;
 
-$animation_file = get_config( sprintf( "animation%d", $animation ) );
-
-if( $animation_file === false ) {
+// wrap back to 0 when the next animation index doesn't exist
+if( get_config( sprintf( "animation%d", $animation ) ) === false ) {
     $animation = 0;
-    $animation_file = get_config( sprintf( "animation%d", $animation ) );
 
-    if( $animation_file === false ) {
+    if( get_config( sprintf( "animation%d", $animation ) ) === false ) {
         error_log( "change_animation.php: 3 " . $mysqli->error);
         echo -2;
         exit;
     }
 }
 
-
-$sql = sprintf( "update CONFIG set `value` = '%d' where `key` = 'current_animation'", $animation );
-$res = $mysqli->query( $sql );
-
-if( !$res ) {
-    error_log( "change_animation.php: 4 " . $mysqli->error);
-}
-
-$sql = sprintf( "insert into PLAY_QUEUE_ANIMATION( hist_an_user, hist_ae_user, hist_lo_user, file ) " .
-                        "values( '%s', '%s', '%s', '%s' )",
-                        addslashes($_SESSION["USER"]["username"]),
-                        addslashes($_SESSION["USER"]["username"]),
-                        addslashes($_SESSION["USER"]["username"]),
-                        addslashes( $animation_file) );
-$res = $mysqli->query( $sql );
-
-if( !$res ) {
-    error_log( "change_animation.php: 5 " . $mysqli->error);
-}
-
+change_animation_to( $animation );
 
 ?>

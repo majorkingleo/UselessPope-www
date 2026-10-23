@@ -479,4 +479,54 @@ function mysql_filter_input( $method, $var_name )
     return filter_input(  $method, $var_name, FILTER_CALLBACK, array("options"=>"mysql_real_escape_string"));
 }
 
+/**
+ * Switch to a specific animation index and enqueue it, so the broker stops the
+ * running animation and launches the corresponding Python script.
+ *
+ * Reads CONFIG `animation<N>` to resolve the script path, sets
+ * CONFIG `current_animation` to $animation, and inserts the file into
+ * PLAY_QUEUE_ANIMATION (the queue consumed by the broker).
+ *
+ * @param int $animation  animation index (0..N), e.g. 5 for text_scroll.py
+ * @return bool true on success
+ */
+function change_animation_to( $animation )
+{
+    global $mysqli;
+
+    $animation = intval($animation);
+
+    $res = $mysqli->query( sprintf( "select * from CONFIG where `key`='animation%d'", $animation ) );
+    if( !$res ) {
+        error_log( "change_animation_to: 1 " . $mysqli->error );
+        return false;
+    }
+
+    $row = $res->fetch_assoc();
+    if( !$row || !isset($row["value"]) ) {
+        error_log( "change_animation_to: animation{$animation} not found" );
+        return false;
+    }
+
+    $animation_file = $row["value"];
+
+    $sql = sprintf( "update CONFIG set `value` = '%d' where `key` = 'current_animation'", $animation );
+    if( !$mysqli->query( $sql ) ) {
+        error_log( "change_animation_to: 2 " . $mysqli->error );
+        return false;
+    }
+
+    $username = addslashes($_SESSION["USER"]["username"]);
+    $sql = sprintf( "insert into PLAY_QUEUE_ANIMATION( hist_an_user, hist_ae_user, hist_lo_user, file ) " .
+                    "values( '%s', '%s', '%s', '%s' )",
+                    $username, $username, $username,
+                    addslashes( $animation_file ) );
+    if( !$mysqli->query( $sql ) ) {
+        error_log( "change_animation_to: 3 " . $mysqli->error );
+        return false;
+    }
+
+    return true;
+}
+
 ?>

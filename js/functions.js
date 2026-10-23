@@ -107,12 +107,21 @@ $(document).ready(function() {
                 });
             } );
 
-            $("#save_banner").click( function() {
+            function save_banner() {
                 $.ajax({
                     type: "POST",
                     url: "lib/save_scroll_text.php",
                     data: "scroll_text=" + encodeURIComponent($("#banner").val())
                 });
+            }
+
+            $("#save_banner").click( save_banner );
+
+            $("#banner").keypress( function(event) {
+                if( event.which === 13 ) {   // Enter key
+                    event.preventDefault();
+                    save_banner();
+                }
             } );
         }
 });

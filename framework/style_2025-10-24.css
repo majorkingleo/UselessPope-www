@@ -467,6 +467,20 @@ table.log td:nth-child(2) p span {
     background-image: linear-gradient(70deg, #62482E, #20aa58);
 }
 
+/* laufschrift */
+
+.banner .column:nth-child(1) {
+     width: auto;
+}
+.banner .column:nth-child(1) input {
+     width: 200px;
+}
+
+.banner button {
+    padding: 7px 20px;
+    text-wrap: nowrap;
+}
+
 /* passwort ändern */
 
 #password .login .column:nth-child(1) {
