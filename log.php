@@ -28,9 +28,9 @@ if( !$res ) {
 
 while( $SERMON = $res->fetch_assoc() ) {
       printf( "<tr>\n");
-      printf( "  <td>%s</td>\n", $SERMON["hist_an_zeit"]);
-      printf( "  <td><p>%s</p>\n", $SERMON["action"]);
-      printf( "      <p>→ %s</p>\n", $SERMON["reaction"]);
+      printf( "  <td>%s</td>\n", htmlspecialchars( $SERMON["hist_an_zeit"], ENT_QUOTES, 'UTF-8' ) );
+      printf( "  <td><p>%s</p>\n", htmlspecialchars( $SERMON["action"], ENT_QUOTES, 'UTF-8' ) );
+      printf( "      <p>→ %s</p>\n", htmlspecialchars( $SERMON["reaction"], ENT_QUOTES, 'UTF-8' ) );
       printf( "   </td>\n");
       printf( "</tr>\n");
 }

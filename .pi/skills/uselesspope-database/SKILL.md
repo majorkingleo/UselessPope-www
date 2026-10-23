@@ -37,7 +37,7 @@ Authoritative schema source: **`/home/papst/UselessPope-Broker/create.sql`**
 | `CONFIG` | 16 | runtime settings (key/value) | www, python `config.py`, broker (seeds) |
 | `STATS` | 11 | counters/computed stats (key/value) | python animations, broker `FetchStats` |
 | `STATUS_LEDS` | 10 | LED colors for the simulator | www `sim/` |
-| `SERMON` | 3 719 | event log (action → reaction) | broker |
+| `SERMON` | 3 719 | event log (action → reaction) | broker, www `save_scroll_text.php` |
 | `USERS` | 11 | auth (username/password/lockout) | www `common_login/` |
 | `USERRIGHTS` | 0 | per-user rights | www admin |
 | `USERPROPERTIES` | 5 | per-user profile (name/title) | www admin |
@@ -117,6 +117,11 @@ key/value table (`name` PK, `value` INT = 0xRRGGBB color).
    `P_BUTTON_QUEUE`.
 3. Animation change → `PLAY_QUEUE_ANIMATION` row → broker stops the running
    animation process and launches the new file → archives to `P_PLAY_QUEUE_ANIMATION`.
+4. Magnificat change → no hardware action, so `save_scroll_text.php` writes the
+   `SERMON` row itself via `add_sermon_entry()` (helper in `lib/global.php`).
+
+`SERMON` is the only table the web front-end writes outside the active queues/
+`CONFIG`; keep `add_sermon_entry()` as the single way to do so.
 
 For the full column-level schema and per-table detail, see
 [references/schema.md](references/schema.md).

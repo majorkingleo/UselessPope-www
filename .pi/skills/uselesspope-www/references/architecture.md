@@ -88,6 +88,9 @@ every 100 s.
   reads `CONFIG.animationN` for the file, inserts into `PLAY_QUEUE_ANIMATION`.
 - **`change_fog.php`** — toggles `CONFIG.fog` (0/1) and stamps `hist_ae_zeit` /
   `hist_ae_user`.
+- **`save_scroll_text.php`** — saves the Magnificat in `CONFIG.scroll_text` and
+  `CONFIG.animation5_title`, switches to animation 5 if needed, and appends a
+  `SERMON` entry (`add_sermon_entry()` in `global.php`) when the text changed.
 
 ## Auth & admin: `common_login/`
 

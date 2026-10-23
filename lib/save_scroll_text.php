@@ -79,6 +79,8 @@ function get_config_value( $mysqli, $key )
 // The Magnificat text is displayed by text_scroll.py via CONFIG `scroll_text`.
 // Keep the text-scroll animation's title (`animation5_title`) in sync so the
 // animation listing / web UI reflect the new message too.
+$old_scroll_text = get_config_value( $mysqli, "scroll_text" );
+
 $ok  = save_config_value( $mysqli, "scroll_text",      $scroll_text );
 $ok  = save_config_value( $mysqli, "animation5_title", $scroll_text ) && $ok;
 
@@ -91,6 +93,20 @@ if( intval( get_config_value( $mysqli, "current_animation" ) ) !== 5 ) {
 if( !$ok ) {
     echo -2;
     exit;
+}
+
+// Announce the new Magnificat in the sermon log, but only when the text
+// actually changed (the endpoint is also called for unchanged input).
+if( $old_scroll_text !== $scroll_text ) {
+    // SERMON.reaction is VARCHAR(1024); clip the user supplied text so the
+    // insert cannot fail because of the column limit.
+    $log_text = mb_substr( $scroll_text, 0, 900, 'UTF-8' );
+
+    add_sermon_entry(
+        sprintf( "%s hat ein neues Magnificat erstellt.", $_SESSION["USER"]["username"] ),
+        $log_text !== ""
+            ? sprintf( "Der Papst verkündet: %s", $log_text )
+            : "Der Papst verkündet: Das Magnificat ist verstummt." );
 }
 
 echo 1;

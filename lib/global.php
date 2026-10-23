@@ -480,6 +480,39 @@ function mysql_filter_input( $method, $var_name )
 }
 
 /**
+ * Append an entry to the sermon log (SERMON), which is rendered by log.php.
+ *
+ * Hardware actions are logged by the broker. Web-only actions (like changing
+ * the Magnificat) have no queue/broker equivalent, so they write their entry
+ * directly. The caller is responsible for connecting to the database.
+ *
+ * @param string $action   what happened (log.php left column)
+ * @param string $reaction the Pope's response (log.php right column)
+ * @return bool true on success
+ */
+function add_sermon_entry( $action, $reaction )
+{
+    global $mysqli;
+
+    $username = isset( $_SESSION["USER"]["username"] ) ? $_SESSION["USER"]["username"] : "";
+
+    $sql = sprintf( "insert into SERMON ( action, reaction, hist_an_user, hist_ae_user, hist_lo_user ) " .
+                    "values ( '%s', '%s', '%s', '%s', '%s' )",
+                    addslashes( $action ),
+                    addslashes( $reaction ),
+                    addslashes( $username ),
+                    addslashes( $username ),
+                    addslashes( $username ) );
+
+    if( !$mysqli->query( $sql ) ) {
+        error_log( "add_sermon_entry: " . $mysqli->error );
+        return false;
+    }
+
+    return true;
+}
+
+/**
  * Switch to a specific animation index and enqueue it, so the broker stops the
  * running animation and launches the corresponding Python script.
  *

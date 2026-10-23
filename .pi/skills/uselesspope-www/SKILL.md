@@ -38,6 +38,7 @@ lib/                       # shared PHP + AJAX endpoints
   change_brightness.php    # adjust CONFIG.brightness
   change_animation.php     # cycle LED animation, queue PLAY_QUEUE_ANIMATION
   change_fog.php           # toggle CONFIG.fog
+  save_scroll_text.php     # save Magnificat (CONFIG.scroll_text) + log to SERMON
   lines_of_code.php        # hardcoded LoC counts shown in footer
   user_tables.sql          # USERS / USERRIGHTS / USERPROPERTIES schema
 common_login/              # session-based auth + user admin (login/logout/admin_users*)
@@ -70,6 +71,8 @@ log.htm / test.htm         # static HTML mockups (log preview, button/party test
 - `STATS` — key/value dashboard numbers (rotations, frequency, active LEDs,
   top users, most played sound, total actions)
 - `SERMON` — `hist_an_zeit`, `action`, `reaction` rows rendered by `log.php`
+  (written by the broker for sound events and by `save_scroll_text.php` for
+  Magnificat changes via `add_sermon_entry()` in `global.php`)
 - `USERS_ACTIONS` — per-user config: `home_directory`, `button_mac_address`
 - `BUTTON_QUEUE` — queued `PLAYSOUND` commands (written by `play_file.php`)
 - `PLAY_QUEUE_ANIMATION` — queued LED animation changes
