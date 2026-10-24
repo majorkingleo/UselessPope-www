@@ -45,9 +45,17 @@ body#log details summary {
     font-weight: bold;
 }
 
-body#log.bf table.log :is(th, td):first-child {
+body#log.bf table.log > tbody > tr > :is(th, td):first-child {
     width: 150px;
     padding: 10px 0 0 10px;
+}
+
+body#log.bf table.log tr:nth-child(2n) {
+    background: transparent;
+}
+
+body#log.bf table.log > tbody > tr {
+    border-bottom: 1px solid var(--backgroundbright);
 }
 
 body#log.bf table.log td:last-child details summary:hover {
@@ -61,7 +69,9 @@ body#log details[open] summary {
 body#log .bf-game-meta {
     font-size: 12px;
     line-height: 16px;
-    margin: 4px 0 6px;
+    margin: 4px 0 0;
+    padding-bottom: 8px;
+    border-bottom: 1px solid var(--backgroundtext);
 }
 
 body#log table.bf-game-stats {
@@ -76,6 +86,7 @@ body#log table.bf-game-stats td {
     padding: 2px 18px 3px 0;
     text-align: left;
     vertical-align: top;
+    font-size: 14px;
 }
 
 body#log table.bf-game-stats th {
@@ -91,7 +102,6 @@ body#log table.bf-game-stats td:nth-child(n+3) {
 
 /* table.log styles target every descendant td, so reset the nested table. */
 body#log table.log table.bf-game-stats td:nth-child(1) {
-    font-size: 13px;
     white-space: normal;
     padding-top: 2px;
     width: 200px;
@@ -113,6 +123,7 @@ $sql = "select g.idx as game_id, g.mapname, g.gametype, g.started_at, g.ended_at
        "left join P_BF1942_PLAYER p on p.game_id = g.idx " .
        "where g.idle = 0 " .
        "order by g.ended_at desc, g.idx desc, " .
+       "         case when p.team = g.winning_team then 0 else 1 end, " .
        "         p.score desc, p.kills desc, p.deaths asc, p.slot asc";
 
 $res = $mysqli->query( $sql );
