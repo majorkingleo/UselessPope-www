@@ -101,7 +101,7 @@ print_header();
 
   <h2>Game Log</h2>
 
-    <iframe src="bf_log.php" title="game log" id="game-log" height="300px"></iframe>
+    <iframe src="bf_log.php" title="game log" id="game-log" height="500px"></iframe>
 
   <h2>Sakristei</h2>
   

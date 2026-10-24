@@ -36,13 +36,22 @@ function bf_log_date( $datetime )
 }
 ?>
 
-<body lang="de" id="log">
+<body lang="de" id="log" class="bf">
 
 <style>
 /* Details rows in the iframe game log. The outer table reuses table.log. */
 body#log details summary {
     cursor: pointer;
     font-weight: bold;
+}
+
+body#log.bf table.log :is(th, td):first-child {
+    width: 150px;
+    padding: 10px 0 0 10px;
+}
+
+body#log.bf table.log td:last-child details summary:hover {
+    text-decoration: underline;
 }
 
 body#log details[open] summary {
@@ -85,6 +94,7 @@ body#log table.log table.bf-game-stats td:nth-child(1) {
     font-size: 13px;
     white-space: normal;
     padding-top: 2px;
+    width: 200px;
 }
 
 body#log table.log table.bf-game-stats td:nth-child(2) {
