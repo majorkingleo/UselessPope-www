@@ -218,6 +218,7 @@ if( $res ) {
   <h2>Sakristei</h2>
   
     <div id="admin">
+      <a href="bf.php"><button><span>bf2942</span></button></a>
       <a href="common_login/logout.php"><button><span>Exkommunikation einleiten</span></button></a>
       <a href="common_login/admin_myself.php"><button><span>Geheimes Zugriffswort erneuern</span></button></a>
     </div>
