@@ -16,7 +16,7 @@ print_header();
  <table class="log">
 
 <?php
-$sql = sprintf( "select * from SERMON order by hist_an_zeit desc");
+$sql = sprintf( "select * from SERMON where year( hist_an_zeit ) = year( curdate() ) order by hist_an_zeit desc");
 
 $res = $mysqli->query( $sql );
 
