@@ -14,7 +14,7 @@ connect_db();
  *
  * Shape (same key -> element id convention as lib/get_uptime.php):
  *   bf_map, bf_hoster, bf_numplayers, bf_tickets, bf_round_time, bf_online
- *   bf_players: array of live players for the stats table
+ *   bf_players: all-time totals per player (sum over P_BF1942_PLAYER)
  *   bf_teams:   array of { title, players } for #bf-teams
  *
  * With ?suggest=1 the teams are a balanced proposal derived from the live
@@ -91,6 +91,7 @@ if( !$res ) {
 $status = $res->fetch_assoc();
 
 $history = array();
+$all_time_players = array();
 
 $sql = "select player_name, count(*) as games, sum( score ) as score, " .
        "       sum( kills ) as kills, sum( deaths ) as deaths, " .
@@ -104,8 +105,35 @@ if( !$res ) {
 } else {
     while( $row = $res->fetch_assoc() ) {
         $history[ $row["player_name"] ] = $row;
+
+        $all_time_players[] = array(
+            "name"   => $row["player_name"],
+            "games"  => intval( $row["games"] ),
+            "score"  => intval( $row["score"] ),
+            "kills"  => intval( $row["kills"] ),
+            "deaths" => intval( $row["deaths"] ),
+        );
     }
 }
+
+// The statistics table is an all-time leaderboard, not the current round.
+usort( $all_time_players, function( $a, $b ) {
+    if( $a["score"] !== $b["score"] ) {
+        return ( $a["score"] > $b["score"] ) ? -1 : 1;
+    }
+
+    if( $a["kills"] !== $b["kills"] ) {
+        return ( $a["kills"] > $b["kills"] ) ? -1 : 1;
+    }
+
+    if( $a["deaths"] !== $b["deaths"] ) {
+        return ( $a["deaths"] < $b["deaths"] ) ? -1 : 1;
+    }
+
+    return strcasecmp( $a["name"], $b["name"] );
+} );
+
+$out["bf_players"] = $all_time_players;
 
 $live_players = array();
 $online = false;
@@ -148,8 +176,6 @@ if( $status ) {
         }
     }
 }
-
-$out["bf_players"] = $live_players;
 
 /*
  * Current teams: group the live roster by its team id.

@@ -98,7 +98,7 @@ function render_bf_players( players )
     if( !players || !players.length ) {
         tbody.append(
             $( "<tr>" ).append(
-                $( "<td>" ).attr( "colspan", 5 ).text( "Keine Spieler online." )
+                $( "<td>" ).attr( "colspan", 5 ).text( "Keine Statistik vorhanden." )
             )
         );
         return;
