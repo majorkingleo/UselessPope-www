@@ -1,0 +1,259 @@
+<?php
+
+include_once( "global.php" );
+
+if( !logged_in() ) {
+    error_log( "get_bf_stats.php: not logged in" );
+    exit;
+}
+
+connect_db();
+
+/*
+ * Returns the current Battlefield 1942 state for bf.php.
+ *
+ * Shape (same key -> element id convention as lib/get_uptime.php):
+ *   bf_map, bf_hoster, bf_numplayers, bf_tickets, bf_round_time, bf_online
+ *   bf_players: array of live players for the stats table
+ *   bf_teams:   array of { title, players } for #bf-teams
+ *
+ * With ?suggest=1 the teams are a balanced proposal derived from the live
+ * roster and the archived per-player history, instead of the current teams.
+ */
+
+function bf_team_title( $team )
+{
+    switch( intval( $team ) ) {
+        case 1: return "Achse";
+        case 2: return "Alliierte";
+        default: return "Unbekannt";
+    }
+}
+
+function bf_format_round_time( $seconds )
+{
+    $seconds = max( 0, intval( $seconds ) );
+
+    return sprintf( "%d:%02d", intval( $seconds / 60 ), $seconds % 60 );
+}
+
+function bf_player_strength( $player, $history, $motm )
+{
+    // Live values are what we know about the current round; the archive
+    // contributes the long-term performance used to balance the teams.
+    $strength = max( 0, intval( $player["score"] ) ) + max( 0, intval( $player["kills"] ) ) * 2;
+
+    if( isset( $history[ $player["name"] ] ) ) {
+        $h = $history[ $player["name"] ];
+
+        $strength += intval( $h["score"] )
+                   + intval( $h["kills"] ) * 2
+                   - intval( $h["deaths"] )
+                   + intval( $h["wins"] ) * 10;
+    }
+
+    if( isset( $motm[ $player["name"] ] ) ) {
+        $strength += intval( $motm[ $player["name"] ] ) * 20;
+    }
+
+    return $strength;
+}
+
+$suggest = isset( $_GET["suggest"] ) && $_GET["suggest"];
+
+$out = array(
+    "bf_map"        => "–",
+    "bf_hoster"     => "–",
+    "bf_numplayers" => "–",
+    "bf_tickets"    => "–",
+    "bf_round_time" => "–",
+    "bf_online"     => "offline",
+    "bf_players"    => array(),
+    "bf_teams"      => array(),
+);
+
+// One row per server: prefer the most recently refreshed status. The query
+// response has no beacon GUID, so discovery and query data are joined by IP.
+$sql = "select st.*, srv.name as server_name, " .
+       "       timestampdiff( second, st.last_seen, now() ) as last_seen_age " .
+       "from BF1942_STATUS st " .
+       "left join BF1942_SERVER srv on srv.idx = ( " .
+       "    select s2.idx from BF1942_SERVER s2 " .
+       "    where s2.ip_address = st.server_ip " .
+       "    order by s2.last_seen desc limit 1 " .
+       ") " .
+       "order by st.last_seen desc limit 1";
+
+$res = $mysqli->query( $sql );
+
+if( !$res ) {
+    error_log( "get_bf_stats.php: 1 " . $mysqli->error );
+    printf( "%s", json_encode( $out ) );
+    exit;
+}
+
+$status = $res->fetch_assoc();
+
+// The archive has no dedicated MotM column. Count a round as "Man of the
+// Match" when the player had the highest score on the winning team (or the
+// highest score overall for games with an unknown winner). Zero-score rounds
+// are ignored so a draw with an empty scoreboard does not award everybody.
+$motm = array();
+
+$sql = "select p.player_name, count(*) as motm " .
+       "from P_BF1942_PLAYER p " .
+       "join ( " .
+       "    select game_id, max( score ) as best " .
+       "    from P_BF1942_PLAYER " .
+       "    where score > 0 and ( winning_team = 0 or team = winning_team ) " .
+       "    group by game_id " .
+       ") b on b.game_id = p.game_id and b.best = p.score " .
+       "where p.score > 0 and ( p.winning_team = 0 or p.team = p.winning_team ) " .
+       "group by p.player_name";
+
+$res = $mysqli->query( $sql );
+
+if( !$res ) {
+    error_log( "get_bf_stats.php: 2 " . $mysqli->error );
+} else {
+    while( $row = $res->fetch_assoc() ) {
+        $motm[ $row["player_name"] ] = intval( $row["motm"] );
+    }
+}
+
+$history = array();
+
+$sql = "select player_name, count(*) as games, sum( score ) as score, " .
+       "       sum( kills ) as kills, sum( deaths ) as deaths, " .
+       "       sum( case when winning_team > 0 and team = winning_team then 1 else 0 end ) as wins " .
+       "from P_BF1942_PLAYER group by player_name";
+
+$res = $mysqli->query( $sql );
+
+if( !$res ) {
+    error_log( "get_bf_stats.php: 3 " . $mysqli->error );
+} else {
+    while( $row = $res->fetch_assoc() ) {
+        $history[ $row["player_name"] ] = $row;
+    }
+}
+
+$live_players = array();
+$online = false;
+
+if( $status ) {
+    $online = intval( $status["last_seen_age"] ) <= 90;
+    $server_ip = $status["server_ip"];
+
+    $out["bf_map"]        = $status["mapname"] ? $status["mapname"] : "–";
+    $out["bf_hoster"]     = $status["server_name"] ? $status["server_name"] : ( $status["hostname"] ? $status["hostname"] : "–" );
+    $out["bf_numplayers"] = sprintf( "%d / %d", intval( $status["numplayers"] ), intval( $status["maxplayers"] ) );
+    $out["bf_tickets"]    = sprintf( "%d : %d", intval( $status["tickets1"] ), intval( $status["tickets2"] ) );
+    $out["bf_round_time"] = bf_format_round_time( $status["round_time_remain"] );
+    $out["bf_online"]     = $online ? "online" : "offline";
+
+    if( $online ) {
+        // BF1942_PLAYER is a live snapshot. Rows of players who already
+        // left keep their old last_seen, so only show the fresh ones.
+        $sql = sprintf( "select * from BF1942_PLAYER " .
+                        "where server_ip = '%s' and last_seen >= now() - interval 90 second " .
+                        "order by score desc, kills desc, deaths asc, slot asc",
+                        $mysqli->real_escape_string( $server_ip ) );
+
+        $res = $mysqli->query( $sql );
+
+        if( !$res ) {
+            error_log( "get_bf_stats.php: 4 " . $mysqli->error );
+        } else {
+            while( $row = $res->fetch_assoc() ) {
+                $live_players[] = array(
+                    "name"   => $row["player_name"],
+                    "slot"   => intval( $row["slot"] ),
+                    "score"  => intval( $row["score"] ),
+                    "kills"  => intval( $row["kills"] ),
+                    "deaths" => intval( $row["deaths"] ),
+                    "ping"   => intval( $row["ping"] ),
+                    "team"   => intval( $row["team"] ),
+                    "motm"   => isset( $motm[ $row["player_name"] ] ) ? $motm[ $row["player_name"] ] : 0,
+                );
+            }
+        }
+    }
+}
+
+$out["bf_players"] = $live_players;
+
+/*
+ * Current teams: group the live roster by its team id.
+ * Team 1 is the Axis, team 2 the Allies in BF1942. The template used to show
+ * the Allies on the left, so keep that order.
+ */
+$teams = array( 0 => array(), 1 => array(), 2 => array() );
+
+foreach( $live_players as $player ) {
+    $team = intval( $player["team"] );
+
+    if( !isset( $teams[ $team ] ) ) {
+        $team = 0;
+    }
+
+    $teams[ $team ][] = $player;
+}
+
+if( $suggest && count( $live_players ) > 0 ) {
+    // Snake draft: strongest player to team 1, next to team 2, then reverse
+    // the direction every pair, so both teams get a comparable total strength.
+    usort( $live_players, function( $a, $b ) use ( $history, $motm ) {
+        $sa = bf_player_strength( $a, $history, $motm );
+        $sb = bf_player_strength( $b, $history, $motm );
+
+        if( $sa === $sb ) {
+            return strcasecmp( $a["name"], $b["name"] );
+        }
+
+        return ( $sa > $sb ) ? -1 : 1;
+    } );
+
+    $teams = array( 0 => array(), 1 => array(), 2 => array() );
+
+    foreach( $live_players as $i => $player ) {
+        $round = intval( $i / 2 );
+        $pair  = $i % 2;
+
+        if( $round % 2 === 0 ) {
+            $team = ( $pair === 0 ) ? 1 : 2;
+        } else {
+            $team = ( $pair === 0 ) ? 2 : 1;
+        }
+
+        $teams[ $team ][] = $player;
+    }
+}
+
+$team_output = array();
+
+foreach( array( 2, 1, 0 ) as $team ) {
+    if( $team === 0 && count( $teams[0] ) === 0 ) {
+        continue;
+    }
+
+    $team_output[] = array(
+        "team"    => $team,
+        "title"   => bf_team_title( $team ),
+        "players" => $teams[ $team ],
+    );
+}
+
+// Always render the two main team columns, even when nobody is on the server.
+if( count( $live_players ) === 0 ) {
+    $team_output = array(
+        array( "team" => 2, "title" => bf_team_title( 2 ), "players" => array() ),
+        array( "team" => 1, "title" => bf_team_title( 1 ), "players" => array() ),
+    );
+}
+
+$out["bf_teams"] = $team_output;
+
+printf( "%s", json_encode( $out, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES ) );
+
+?>

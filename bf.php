@@ -11,16 +11,6 @@ if( !logged_in() )
 }
 
 print_header();
-
-connect_db();
-$scroll_text = "LAN 2.1"; // fallback default if not yet stored in DB
-$res = $mysqli->query( "select * from CONFIG where `key`='scroll_text'" );
-if( $res ) {
-    $row = $res->fetch_assoc();
-    if( $row && isset( $row["value"] ) ) {
-        $scroll_text = $row["value"];
-    }
-}
 ?>
 
 
@@ -41,11 +31,27 @@ if( $res ) {
     
      <div class="row">
         <div class="column">Map:</div>
-        <div class="column"><span class="highlight bf_map">Bocage</span></div>
+        <div class="column"><span class="highlight bf_map" id="bf_map">–</span></div>
      </div>
      <div class="row">
         <div class="column">Server:</div>
-        <div class="column"><span class="highlight bf_hoster">Marci</span></div>
+        <div class="column"><span class="highlight bf_hoster" id="bf_hoster">–</span></div>
+     </div>
+     <div class="row">
+        <div class="column">Spieler:</div>
+        <div class="column"><span class="highlight" id="bf_numplayers">–</span></div>
+     </div>
+     <div class="row">
+        <div class="column">Tickets:</div>
+        <div class="column"><span class="highlight" id="bf_tickets">–</span></div>
+     </div>
+     <div class="row">
+        <div class="column">Rundenzeit:</div>
+        <div class="column"><span class="highlight" id="bf_round_time">–</span></div>
+     </div>
+     <div class="row">
+        <div class="column">Status:</div>
+        <div class="column"><span class="highlight" id="bf_online">–</span></div>
      </div>
    
    </div>
@@ -57,71 +63,39 @@ if( $res ) {
   
     <table>
 
+    <thead>
     <tr>
         <th></th>
         <th>Spieler</th>
         <th>Punkte</th>
-        <th>Man of the Match</th>
+        <th title="Siege als bester Spieler des Siegerteams (aus dem Rundenarchiv)">Man of the Match</th>
         <th>Kills</th>
         <th>Deaths</th>
     </tr>
-    
+    </thead>
+
+    <tbody id="bf-stats-body">
     <tr>
-        <td>🥇</td>
-        <td>[TK]der.Mucki</td>
-        <td>500</td>
-        <td>5</td>
-        <td>100</td>
-        <td>10</td>
+        <td colspan="6">Lade Statistik…</td>
     </tr>
-    <tr>
-        <td>🥈</td>
-        <td>[TK]Der.General</td>
-        <td>400</td>
-        <td>4</td>
-        <td>99</td>
-        <td>20</td>
-    </tr>
-    <tr>
-        <td>🥉</td>
-        <td>[TK]DirtySanchez</td>
-        <td>300</td>
-        <td>3</td>
-        <td>88</td>
-        <td>30</td>
-    </tr>
-    <tr>
-        <td></td>
-        <td>[TK]MajorLeo</td>
-        <td>200</td>
-        <td>2</td>
-        <td>77</td>
-        <td>40</td>
-    </tr>
+    </tbody>
     
     </table>
       
     </div>
   
-    <button><span>Team vorschlagen</span></button>
+    <button id="bf-suggest" type="button"><span>Team vorschlagen</span></button>
 
     <div id="bf-teams" class="grid">
     
         <div>
             <p>Alliierte</p>
-            <p>[TK]der.Mucki<br>
-            [TK]Der.General<br>
-            [TK]rotane<br>
-            [TK]MajorLeo</p>
+            <p>Lade Teams…</p>
         </div>
 
         <div>
             <p>Achse</p>
-            <p>[TK]DirtySanchez<br>
-            [TK]LaneThePain<br>
-            [TK]HauptmannEder<br>
-            [TK]LeutnantORF<br>
-            [TK]oanvoanc</p>
+            <p>Lade Teams…</p>
         </div>
     
     </div>

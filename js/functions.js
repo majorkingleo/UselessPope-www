@@ -77,7 +77,134 @@ function fetch_play_data( data )
     $.get( "lib/get_sound_files.php", parse_play_data );
 }
 
+
+/*
+ * Battlefield 1942 page (bf.php). Same polling pattern as the Papst dashboard:
+ * lib/get_bf_stats.php returns a flat key -> element id map plus two arrays
+ * that are rendered as table rows / team columns.
+ */
+
+var bf_team_mode = "live";
+
+function render_bf_players( players )
+{
+    var tbody = $( "#bf-stats-body" );
+
+    if( !tbody.length )
+        return;
+
+    tbody.empty();
+
+    if( !players || !players.length ) {
+        tbody.append(
+            $( "<tr>" ).append(
+                $( "<td>" ).attr( "colspan", 6 ).text( "Keine Spieler online." )
+            )
+        );
+        return;
+    }
+
+    var medals = [ "🥇", "🥈", "🥉" ];
+
+    $.each( players, function( idx, player ) {
+        var tr = $( "<tr>" );
+
+        tr.append( $( "<td>" ).text( medals[ idx ] || "" ) );
+        tr.append( $( "<td>" ).text( player.name ) );
+        tr.append( $( "<td>" ).text( player.score ) );
+        tr.append( $( "<td>" ).text( player.motm ) );
+        tr.append( $( "<td>" ).text( player.kills ) );
+        tr.append( $( "<td>" ).text( player.deaths ) );
+
+        tbody.append( tr );
+    } );
+}
+
+function render_bf_teams( teams )
+{
+    var container = $( "#bf-teams" );
+
+    if( !container.length )
+        return;
+
+    container.empty();
+
+    if( !teams || !teams.length ) {
+        container.append( $( "<div>" ).append( $( "<p>" ).text( "Keine Teams verfügbar." ) ) );
+        return;
+    }
+
+    $.each( teams, function( idx, team ) {
+        var div = $( "<div>" );
+
+        div.append( $( "<p>" ).text( team.title ) );
+
+        var names = $( "<p>" );
+
+        if( !team.players || !team.players.length ) {
+            names.text( "–" );
+        } else {
+            $.each( team.players, function( pidx, player ) {
+                if( pidx > 0 )
+                    names.append( $( "<br>" ) );
+
+                names.append( document.createTextNode( player.name ) );
+            } );
+        }
+
+        div.append( names );
+        container.append( div );
+    } );
+}
+
+function parse_bf_data( data )
+{
+    var arr = $.parseJSON( data );
+
+    for( var key in arr ) {
+        var value = arr[ key ];
+
+        if( key === "bf_players" ) {
+            render_bf_players( value );
+            continue;
+        }
+
+        if( key === "bf_teams" ) {
+            render_bf_teams( value );
+            continue;
+        }
+
+        $( '#' + key ).text( value );
+    }
+}
+
+function fetch_bf_data()
+{
+    var url = "lib/get_bf_stats.php";
+
+    if( bf_team_mode === "suggest" )
+        url += "?suggest=1";
+
+    $.get( url, parse_bf_data );
+}
+
 $(document).ready(function() {
+
+        if( $("#bf-stats").length )
+        {
+            setInterval( fetch_bf_data, 5000 );
+            fetch_bf_data();
+
+            $("#bf-suggest").click( function() {
+                bf_team_mode = ( bf_team_mode === "live" ) ? "suggest" : "live";
+
+                $(this).find("span").text(
+                    bf_team_mode === "suggest" ? "Aktuelle Teams anzeigen" : "Team vorschlagen"
+                );
+
+                fetch_bf_data();
+            } );
+        }
    
         if( $("#uptime").length )
         {
