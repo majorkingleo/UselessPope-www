@@ -47,6 +47,25 @@ if( !isset($NOCONTENT_TYPE) )
 header("Pragma: no-cache");
 header("Expires: 0");
 
+/*
+ * Keep sessions alive as long as practically possible. The panel is used at
+ * LAN parties and should not log people out after a day. "Infinite" is not
+ * possible (browsers cap cookie expiry, e.g. Chrome at 400 days), so use ten
+ * years for both the cookie and PHP's server-side garbage collection.
+ */
+define('SESSION_LIFETIME', 315360000); // 10 years
+
+ini_set('session.gc_maxlifetime', (string) SESSION_LIFETIME);
+ini_set('session.cookie_lifetime', (string) SESSION_LIFETIME);
+
+session_set_cookie_params([
+    'lifetime' => SESSION_LIFETIME,
+    'path'     => '/',
+    'secure'   => false, // the panel is served over plain HTTP
+    'httponly' => true,
+    'samesite' => 'Lax',
+]);
+
 session_start();
 
 error_reporting(E_ALL);
