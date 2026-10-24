@@ -57,7 +57,7 @@ print_header();
    </div>
   
   
-  <h2>Statistik aller Spiele</h2>
+  <h2>Statistik der letzten <span id="bf_stats_games"></span> Spiele</h2>
   
     <div id="bf-stats">
   

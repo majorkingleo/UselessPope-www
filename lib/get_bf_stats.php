@@ -14,7 +14,8 @@ connect_db();
  *
  * Shape (same key -> element id convention as lib/get_uptime.php):
  *   bf_map, bf_hoster, bf_numplayers, bf_tickets, bf_round_time, bf_online
- *   bf_players: all-time totals per player (sum over P_BF1942_PLAYER)
+ *   bf_stats_games: number of most recent games the statistics table covers
+ *   bf_players: totals per player over the last bf_stats_games games
  *   bf_teams:   array of { title, players } for #bf-teams
  *
  * With ?suggest=1 the teams are a balanced proposal derived from the live
@@ -64,6 +65,7 @@ $out = array(
     "bf_tickets"    => "–",
     "bf_round_time" => "–",
     "bf_online"     => "offline",
+    "bf_stats_games" => 0,
     "bf_players"    => array(),
     "bf_teams"      => array(),
 );
@@ -91,12 +93,17 @@ if( !$res ) {
 $status = $res->fetch_assoc();
 
 $history = array();
-$all_time_players = array();
 
-$sql = "select player_name, count(*) as games, sum( score ) as score, " .
-       "       sum( kills ) as kills, sum( deaths ) as deaths, " .
-       "       sum( case when winning_team > 0 and team = winning_team then 1 else 0 end ) as wins " .
-       "from P_BF1942_PLAYER group by player_name";
+// Complete history per player over non-idle games, used to balance the
+// suggested teams. Games not archived in BF1942_GAME yet (a running round)
+// are treated as not idle.
+$sql = "select p.player_name, count(*) as games, sum( p.score ) as score, " .
+       "       sum( p.kills ) as kills, sum( p.deaths ) as deaths, " .
+       "       sum( case when p.winning_team > 0 and p.team = p.winning_team then 1 else 0 end ) as wins " .
+       "from P_BF1942_PLAYER p " .
+       "left join BF1942_GAME g on g.idx = p.game_id " .
+       "where coalesce( g.idle, 0 ) = 0 " .
+       "group by p.player_name";
 
 $res = $mysqli->query( $sql );
 
@@ -105,19 +112,60 @@ if( !$res ) {
 } else {
     while( $row = $res->fetch_assoc() ) {
         $history[ $row["player_name"] ] = $row;
-
-        $all_time_players[] = array(
-            "name"   => $row["player_name"],
-            "games"  => intval( $row["games"] ),
-            "score"  => intval( $row["score"] ),
-            "kills"  => intval( $row["kills"] ),
-            "deaths" => intval( $row["deaths"] ),
-        );
     }
 }
 
-// The statistics table is an all-time leaderboard, not the current round.
-usort( $all_time_players, function( $a, $b ) {
+// The statistics table covers the most recent games only, idle games are
+// skipped. Use the archived games themselves as the window, so an unfinished
+// round still shows up.
+$stats_game_limit = 10;
+$stats_game_ids = array();
+
+$sql = sprintf( "select distinct p.game_id from P_BF1942_PLAYER p " .
+                "left join BF1942_GAME g on g.idx = p.game_id " .
+                "where coalesce( g.idle, 0 ) = 0 " .
+                "order by p.game_id desc limit %d", $stats_game_limit );
+
+$res = $mysqli->query( $sql );
+
+if( !$res ) {
+    error_log( "get_bf_stats.php: 5 " . $mysqli->error );
+} else {
+    while( $row = $res->fetch_assoc() ) {
+        $stats_game_ids[] = intval( $row["game_id"] );
+    }
+}
+
+$out["bf_stats_games"] = count( $stats_game_ids );
+
+$stats_players = array();
+
+if( $stats_game_ids ) {
+    $sql = "select player_name, count(*) as games, sum( score ) as score, " .
+           "       sum( kills ) as kills, sum( deaths ) as deaths " .
+           "from P_BF1942_PLAYER " .
+           "where game_id in ( " . implode( ", ", $stats_game_ids ) . " ) " .
+           "group by player_name";
+
+    $res = $mysqli->query( $sql );
+
+    if( !$res ) {
+        error_log( "get_bf_stats.php: 6 " . $mysqli->error );
+    } else {
+        while( $row = $res->fetch_assoc() ) {
+            $stats_players[] = array(
+                "name"   => $row["player_name"],
+                "games"  => intval( $row["games"] ),
+                "score"  => intval( $row["score"] ),
+                "kills"  => intval( $row["kills"] ),
+                "deaths" => intval( $row["deaths"] ),
+            );
+        }
+    }
+}
+
+// The statistics table is a leaderboard over the recent games.
+usort( $stats_players, function( $a, $b ) {
     if( $a["score"] !== $b["score"] ) {
         return ( $a["score"] > $b["score"] ) ? -1 : 1;
     }
@@ -133,7 +181,7 @@ usort( $all_time_players, function( $a, $b ) {
     return strcasecmp( $a["name"], $b["name"] );
 } );
 
-$out["bf_players"] = $all_time_players;
+$out["bf_players"] = $stats_players;
 
 $live_players = array();
 $online = false;
