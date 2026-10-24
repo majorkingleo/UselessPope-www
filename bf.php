@@ -99,6 +99,10 @@ print_header();
     
     </div>
 
+  <h2>Game Log</h2>
+
+    <iframe src="bf_log.php" title="game log" id="game-log" height="300px"></iframe>
+
   <h2>Sakristei</h2>
   
     <div id="admin">

@@ -203,6 +203,12 @@ $(document).ready(function() {
 
                 fetch_bf_data();
             } );
+
+            // Reload the game log iframe like the sermon log on index.php.
+            setInterval( function() {
+                var f = document.getElementById( "game-log" );
+                if( f ) f.src = f.src;
+            }, 60000 );
         }
    
         if( $("#uptime").length )
