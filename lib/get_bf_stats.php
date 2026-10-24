@@ -137,6 +137,7 @@ $out["bf_players"] = $all_time_players;
 
 $live_players = array();
 $online = false;
+$winning_team = 0;
 
 if( $status ) {
     $online = intval( $status["last_seen_age"] ) <= 90;
@@ -148,6 +149,15 @@ if( $status ) {
     $out["bf_tickets"]    = sprintf( "%d : %d", intval( $status["tickets1"] ), intval( $status["tickets2"] ) );
     $out["bf_round_time"] = bf_format_round_time( $status["round_time_remain"] );
     $out["bf_online"]     = $online ? "online" : "offline";
+
+    $tickets1 = intval( $status["tickets1"] );
+    $tickets2 = intval( $status["tickets2"] );
+
+    if( $tickets1 > $tickets2 ) {
+        $winning_team = 1;
+    } else if( $tickets2 > $tickets1 ) {
+        $winning_team = 2;
+    }
 
     if( $online ) {
         // BF1942_PLAYER is a live snapshot. Rows of players who already
@@ -224,12 +234,36 @@ if( $suggest && count( $live_players ) > 0 ) {
     }
 }
 
+// Show the currently winning team first. On a tie (or no status) keep the
+// previous order (Allies left, Axis right). Inside a team, score decides.
+$team_order = array( 2, 1 );
+
+if( $winning_team === 1 ) {
+    $team_order = array( 1, 2 );
+}
+
+if( count( $teams[0] ) > 0 ) {
+    $team_order[] = 0;
+}
+
 $team_output = array();
 
-foreach( array( 2, 1, 0 ) as $team ) {
-    if( $team === 0 && count( $teams[0] ) === 0 ) {
-        continue;
-    }
+foreach( $team_order as $team ) {
+    usort( $teams[ $team ], function( $a, $b ) {
+        if( $a["score"] !== $b["score"] ) {
+            return ( $a["score"] > $b["score"] ) ? -1 : 1;
+        }
+
+        if( $a["kills"] !== $b["kills"] ) {
+            return ( $a["kills"] > $b["kills"] ) ? -1 : 1;
+        }
+
+        if( $a["deaths"] !== $b["deaths"] ) {
+            return ( $a["deaths"] < $b["deaths"] ) ? -1 : 1;
+        }
+
+        return strcasecmp( $a["name"], $b["name"] );
+    } );
 
     $team_output[] = array(
         "team"    => $team,
