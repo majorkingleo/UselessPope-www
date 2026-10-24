@@ -37,7 +37,7 @@ function bf_format_round_time( $seconds )
     return sprintf( "%d:%02d", intval( $seconds / 60 ), $seconds % 60 );
 }
 
-function bf_player_strength( $player, $history, $motm )
+function bf_player_strength( $player, $history )
 {
     // Live values are what we know about the current round; the archive
     // contributes the long-term performance used to balance the teams.
@@ -50,10 +50,6 @@ function bf_player_strength( $player, $history, $motm )
                    + intval( $h["kills"] ) * 2
                    - intval( $h["deaths"] )
                    + intval( $h["wins"] ) * 10;
-    }
-
-    if( isset( $motm[ $player["name"] ] ) ) {
-        $strength += intval( $motm[ $player["name"] ] ) * 20;
     }
 
     return $strength;
@@ -93,33 +89,6 @@ if( !$res ) {
 }
 
 $status = $res->fetch_assoc();
-
-// The archive has no dedicated MotM column. Count a round as "Man of the
-// Match" when the player had the highest score on the winning team (or the
-// highest score overall for games with an unknown winner). Zero-score rounds
-// are ignored so a draw with an empty scoreboard does not award everybody.
-$motm = array();
-
-$sql = "select p.player_name, count(*) as motm " .
-       "from P_BF1942_PLAYER p " .
-       "join ( " .
-       "    select game_id, max( score ) as best " .
-       "    from P_BF1942_PLAYER " .
-       "    where score > 0 and ( winning_team = 0 or team = winning_team ) " .
-       "    group by game_id " .
-       ") b on b.game_id = p.game_id and b.best = p.score " .
-       "where p.score > 0 and ( p.winning_team = 0 or p.team = p.winning_team ) " .
-       "group by p.player_name";
-
-$res = $mysqli->query( $sql );
-
-if( !$res ) {
-    error_log( "get_bf_stats.php: 2 " . $mysqli->error );
-} else {
-    while( $row = $res->fetch_assoc() ) {
-        $motm[ $row["player_name"] ] = intval( $row["motm"] );
-    }
-}
 
 $history = array();
 
@@ -174,7 +143,6 @@ if( $status ) {
                     "deaths" => intval( $row["deaths"] ),
                     "ping"   => intval( $row["ping"] ),
                     "team"   => intval( $row["team"] ),
-                    "motm"   => isset( $motm[ $row["player_name"] ] ) ? $motm[ $row["player_name"] ] : 0,
                 );
             }
         }
@@ -203,9 +171,9 @@ foreach( $live_players as $player ) {
 if( $suggest && count( $live_players ) > 0 ) {
     // Snake draft: strongest player to team 1, next to team 2, then reverse
     // the direction every pair, so both teams get a comparable total strength.
-    usort( $live_players, function( $a, $b ) use ( $history, $motm ) {
-        $sa = bf_player_strength( $a, $history, $motm );
-        $sb = bf_player_strength( $b, $history, $motm );
+    usort( $live_players, function( $a, $b ) use ( $history ) {
+        $sa = bf_player_strength( $a, $history );
+        $sb = bf_player_strength( $b, $history );
 
         if( $sa === $sb ) {
             return strcasecmp( $a["name"], $b["name"] );

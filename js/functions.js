@@ -98,7 +98,7 @@ function render_bf_players( players )
     if( !players || !players.length ) {
         tbody.append(
             $( "<tr>" ).append(
-                $( "<td>" ).attr( "colspan", 6 ).text( "Keine Spieler online." )
+                $( "<td>" ).attr( "colspan", 5 ).text( "Keine Spieler online." )
             )
         );
         return;
@@ -112,7 +112,6 @@ function render_bf_players( players )
         tr.append( $( "<td>" ).text( medals[ idx ] || "" ) );
         tr.append( $( "<td>" ).text( player.name ) );
         tr.append( $( "<td>" ).text( player.score ) );
-        tr.append( $( "<td>" ).text( player.motm ) );
         tr.append( $( "<td>" ).text( player.kills ) );
         tr.append( $( "<td>" ).text( player.deaths ) );
 
