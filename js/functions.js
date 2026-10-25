@@ -287,7 +287,7 @@ function render_bf_teams( teams )
 
 function parse_bf_data( data )
 {
-    var arr = $.parseJSON( data );
+    var arr = ( typeof data === "string" ) ? $.parseJSON( data ) : data;
 
     for( var key in arr ) {
         var value = arr[ key ];
@@ -320,8 +320,15 @@ $(document).ready(function() {
 
         if( $("#bf-stats").length )
         {
-            setInterval( fetch_bf_data, 5000 );
-            fetch_bf_data();
+            if( window.BF_STATIC && window.BF_STATIC_DATA ) {
+                // A generated archive carries its data with it and must not
+                // poll the live Battlefield endpoints.
+                parse_bf_data( window.BF_STATIC_DATA );
+                $( "#bf-suggest" ).hide();
+            } else {
+                setInterval( fetch_bf_data, 5000 );
+                fetch_bf_data();
+            }
 
             bf_update_sort_indicators();
 
@@ -333,21 +340,23 @@ $(document).ready(function() {
                 bf_set_per_game( !bf_per_game );
             } );
 
-            $("#bf-suggest").click( function() {
-                bf_team_mode = ( bf_team_mode === "live" ) ? "suggest" : "live";
+            if( !window.BF_STATIC ) {
+                $("#bf-suggest").click( function() {
+                    bf_team_mode = ( bf_team_mode === "live" ) ? "suggest" : "live";
 
-                $(this).find("span").text(
-                    bf_team_mode === "suggest" ? "Aktuelle Teams anzeigen" : "Team vorschlagen"
-                );
+                    $(this).find("span").text(
+                        bf_team_mode === "suggest" ? "Aktuelle Teams anzeigen" : "Team vorschlagen"
+                    );
 
-                fetch_bf_data();
-            } );
+                    fetch_bf_data();
+                } );
 
-            // Reload the game log iframe like the sermon log on index.php.
-            setInterval( function() {
-                var f = document.getElementById( "game-log" );
-                if( f ) f.src = f.src;
-            }, 60000 );
+                // Reload the game log iframe like the sermon log on index.php.
+                setInterval( function() {
+                    var f = document.getElementById( "game-log" );
+                    if( f ) f.src = f.src;
+                }, 60000 );
+            }
         }
    
         if( $("#uptime").length )

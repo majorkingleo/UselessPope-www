@@ -1,0 +1,301 @@
+<?php
+include_once( 'lib/global.php' );
+
+if( !logged_in() ) {
+    header( "Location: common_login/login.php" );
+    exit(0);
+}
+
+define( 'BF_STATIC_DIR', __DIR__ . '/static' );
+
+/*
+ * Render one of the Battlefield pages into a string. The working directory is
+ * set to the web root so their relative includes keep working.
+ */
+function bf_static_render_page( $file )
+{
+    global $mysqli;
+
+    $cwd = getcwd();
+    chdir( __DIR__ );
+
+    ob_start();
+    include $file;
+    $html = ob_get_clean();
+
+    chdir( $cwd );
+
+    return $html;
+}
+
+// get_bf_stats.php is an endpoint, but its JSON is exactly the snapshot we
+// need for the archived page.
+function bf_static_render_stats()
+{
+    global $mysqli;
+
+    $cwd = getcwd();
+    chdir( __DIR__ . '/lib' );
+
+    ob_start();
+    include 'get_bf_stats.php';
+    $json = ob_get_clean();
+
+    chdir( $cwd );
+
+    $data = json_decode( $json, true );
+
+    return is_array( $data ) ? $data : null;
+}
+
+// Everything the archived page needs to render without the live installation.
+function bf_static_assets()
+{
+    return array(
+        "favicon.ico",
+        "framework/w3.css",
+        "framework/style_2026-10-24.css",
+        "framework/jquery-3.7.1.js",
+        "framework/jquery-ui-1.14.1/jquery-ui.min.js",
+        "framework/party-2.2.0.min.js",
+        "framework/roboto-mono-v22-latin-400.woff",
+        "framework/roboto-mono-v22-latin-400.woff2",
+        "framework/roboto-mono-v22-latin-600.woff",
+        "framework/roboto-mono-v22-latin-600.woff2",
+        "framework/logophotocopyvector_2-1.png",
+        "js/functions.js",
+        "js/psalme.js",
+    );
+}
+
+function bf_static_copy_assets( $target_dir )
+{
+    foreach( bf_static_assets() as $asset ) {
+        $source = __DIR__ . '/' . $asset;
+        $target = $target_dir . '/' . $asset;
+        $target_dirname = dirname( $target );
+
+        if( !is_dir( $target_dirname ) &&
+            !@mkdir( $target_dirname, 0775, true ) &&
+            !is_dir( $target_dirname ) ) {
+            return "Der Ordner für " . $asset . " konnte nicht erstellt werden.";
+        }
+
+        if( !is_file( $source ) || !@copy( $source, $target ) ) {
+            return "Die Datei " . $asset . " konnte nicht kopiert werden.";
+        }
+    }
+
+    return "";
+}
+
+function bf_static_build_page( $stats, $log_html )
+{
+    $html = bf_static_render_page( 'bf.php' );
+
+    $json = json_encode(
+        $stats,
+        JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES |
+        JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT
+    );
+
+    if( $json === false ) {
+        return null;
+    }
+
+    // The archive lives in static/bf-DATUM/, so links back into the live site
+    // need one more level and the footer script now sits next to the page.
+    $html = str_replace(
+        array(
+            'src="../js/psalme.js"',
+            'href="index.php"',
+            'href="bf.php"',
+            'href="common_login/',
+        ),
+        array(
+            'src="js/psalme.js"',
+            'href="../../index.php"',
+            'href="../../bf.php"',
+            'href="../../common_login/',
+        ),
+        $html
+    );
+
+    $html = str_replace(
+        '</head>',
+        '<script>window.BF_STATIC = true; window.BF_STATIC_DATA = ' . $json . ';</script>' . "\n</head>",
+        $html
+    );
+
+    if( $log_html !== null ) {
+        $srcdoc = htmlspecialchars( $log_html, ENT_QUOTES | ENT_HTML5, 'UTF-8' );
+
+        $html = str_replace(
+            '<iframe src="bf_log.php" title="game log" id="game-log" height="500px"></iframe>',
+            '<iframe title="game log" id="game-log" height="500px" srcdoc="' . $srcdoc . '"></iframe>',
+            $html
+        );
+    }
+
+    return $html;
+}
+
+function bf_static_archives()
+{
+    if( !is_dir( BF_STATIC_DIR ) ) {
+        return array();
+    }
+
+    $archives = array();
+    $entries = @scandir( BF_STATIC_DIR );
+
+    if( $entries === false ) {
+        return $archives;
+    }
+
+    foreach( $entries as $name ) {
+        $path = BF_STATIC_DIR . '/' . $name;
+
+        if( is_dir( $path ) && preg_match( '/^bf-\d{4}-\d{2}-\d{2}$/', $name ) ) {
+            $index = $path . '/index.html';
+
+            if( is_file( $index ) ) {
+                $archives[] = array(
+                    "name"  => $name,
+                    "type"  => "dir",
+                    "href"  => "static/" . rawurlencode( $name ) . "/",
+                    "mtime" => filemtime( $index ),
+                );
+            }
+        } else if( is_file( $path ) && preg_match( '/^bf-\d{4}-\d{2}-\d{2}\.html$/', $name ) ) {
+            // Keep older single-file archives visible.
+            $archives[] = array(
+                "name"  => $name,
+                "type"  => "file",
+                "href"  => "static/" . rawurlencode( $name ),
+                "mtime" => filemtime( $path ),
+                "size"  => filesize( $path ),
+            );
+        }
+    }
+
+    usort( $archives, function( $a, $b ) {
+        $cmp = strcmp( $b["name"], $a["name"] );
+
+        return $cmp !== 0 ? $cmp : strcmp( $a["type"], $b["type"] );
+    } );
+
+    return $archives;
+}
+
+$message = "";
+$error = "";
+
+if( isset( $_SERVER["REQUEST_METHOD"] ) && $_SERVER["REQUEST_METHOD"] === "POST" && isset( $_POST["generate"] ) ) {
+    if( !is_dir( BF_STATIC_DIR ) ) {
+        @mkdir( BF_STATIC_DIR, 0775, true );
+    }
+
+    if( !is_dir( BF_STATIC_DIR ) || !is_writable( BF_STATIC_DIR ) ) {
+        $error = "Der Ordner static/ ist nicht beschreibbar.";
+    } else {
+        $folder_name = "bf-" . date( "Y-m-d" );
+        $folder = BF_STATIC_DIR . "/" . $folder_name;
+        $path = $folder . "/index.html";
+
+        if( !is_dir( $folder ) &&
+            !@mkdir( $folder, 0775, true ) &&
+            !is_dir( $folder ) ) {
+            $error = "Der Ordner static/" . $folder_name . "/ konnte nicht erstellt werden.";
+        } else {
+            $asset_error = bf_static_copy_assets( $folder );
+            $stats = bf_static_render_stats();
+
+            if( $asset_error !== "" ) {
+                $error = $asset_error;
+            } else if( $stats === null ) {
+                $error = "Die Battlefield-Statistik konnte nicht geladen werden.";
+            } else {
+                $log_html = bf_static_render_page( 'bf_log.php' );
+                $html = bf_static_build_page( $stats, $log_html );
+                $existed = file_exists( $path );
+
+                if( $html === null ) {
+                    $error = "Die statische Version konnte nicht erzeugt werden.";
+                } else if( file_put_contents( $path, $html, LOCK_EX ) === false ) {
+                    $error = "Die statische Version konnte nicht gespeichert werden.";
+                } else {
+                    $message = sprintf(
+                        '"static/%s/" wurde %s.',
+                        $folder_name,
+                        $existed ? "aktualisiert" : "erzeugt"
+                    );
+                }
+            }
+        }
+    }
+}
+
+$archives = bf_static_archives();
+
+print_header();
+?>
+
+<body lang="de" id="papst">
+
+<div class="w3-content w3-container" id="tk">
+
+<main>
+
+  <h1>Statische Versionen</h1>
+
+  <div id="admin">
+    <a href="bf.php"><button><span>Useless Battlefield</span></button></a>
+    <a href="index.php"><button><span>Zurück zum Useless Papst</span></button></a>
+  </div>
+
+  <h2>Archiv erzeugen</h2>
+
+  <p>Erzeugt ein eigenständiges Archiv inklusive CSS, JavaScript und Schriften.</p>
+
+  <?php if( $message !== "" ): ?>
+    <p class="highlight"><?php echo htmlspecialchars( $message, ENT_QUOTES, 'UTF-8' ); ?></p>
+  <?php endif; ?>
+
+  <?php if( $error !== "" ): ?>
+    <p><strong>Fehler:</strong> <?php echo htmlspecialchars( $error, ENT_QUOTES, 'UTF-8' ); ?></p>
+  <?php endif; ?>
+
+  <form method="post">
+    <button type="submit" name="generate" value="1"><span>Statische Version von Battlefield erzeugen</span></button>
+  </form>
+
+  <h2>Bereits erzeugte Versionen</h2>
+
+  <?php if( count( $archives ) === 0 ): ?>
+    <p>Noch keine statischen Versionen vorhanden.</p>
+  <?php else: ?>
+    <ul id="static-list">
+    <?php foreach( $archives as $archive ): ?>
+      <li>
+        <a href="<?php echo htmlspecialchars( $archive["href"], ENT_QUOTES, 'UTF-8' ); ?>"><?php echo htmlspecialchars( $archive["name"], ENT_QUOTES, 'UTF-8' ); ?></a>
+        <span>
+          <?php echo date( "d.m.Y H:i", $archive["mtime"] ); ?>
+          <?php if( $archive["type"] === "file" ): ?>
+            &middot; <?php echo number_format( $archive["size"] / 1024, 1, ",", "." ); ?> KiB
+          <?php endif; ?>
+        </span>
+      </li>
+    <?php endforeach; ?>
+    </ul>
+  <?php endif; ?>
+
+</main>
+
+<?php print_footer(); ?>
+
+</div>
+
+</body>
+
+</html>
