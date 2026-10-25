@@ -111,12 +111,7 @@ print_header();
 
     <iframe src="bf_log.php" title="game log" id="game-log" height="500px"></iframe>
 
-  <h2>Sakristei</h2>
-  
-    <div id="admin">
-      <a href="common_login/logout.php"><button><span>Exkommunikation einleiten</span></button></a>
-      <a href="common_login/admin_myself.php"><button><span>Geheimes Zugriffswort erneuern</span></button></a>
-    </div>
+  <?php print_sakristei(); ?>
   
 </main>
 

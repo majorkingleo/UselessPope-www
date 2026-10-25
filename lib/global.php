@@ -202,6 +202,15 @@ function print_lines_of_code()
   echo "</span>";
 }
 
+function print_sakristei()
+{
+  echo "<h2>Sakristei</h2>\n";
+  echo "<div id=\"admin\">\n";
+  echo "  <a href=\"common_login/logout.php\"><button><span>Exkommunikation einleiten</span></button></a>\n";
+  echo "  <a href=\"common_login/admin_myself.php\"><button><span>Geheimes Zugriffswort erneuern</span></button></a>\n";
+  echo "</div>\n";
+}
+
 function print_footer()
 {
   echo "<footer>\n";
