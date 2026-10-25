@@ -482,7 +482,7 @@ table.log td:nth-child(2) p span {
     text-wrap: nowrap;
 }
 
-/* passwort ändern */
+/* passwort ï¿½ndern */
 
 #password .login .column:nth-child(1) {
     width: 25%;
@@ -623,6 +623,17 @@ footer .logo {
 
 
 /* === bf stats ===*/
+
+#bf-per-game {
+    display: inline-block;
+    padding: 8px 16px;
+    margin-bottom: 12px;
+    font-size: 14px;
+}
+
+#bf-per-game[aria-pressed="true"] {
+    background-color: var(--backgroundbright);
+}
 
 #bf-stats table {
     border-collapse: collapse;

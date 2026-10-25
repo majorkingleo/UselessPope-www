@@ -62,6 +62,8 @@ print_header();
   
   
   <h2>Statistik der letzten <span id="bf_stats_games"></span> Spiele</h2>
+
+    <button id="bf-per-game" type="button" aria-pressed="false"><span>Werte pro Spiel</span></button>
   
     <div id="bf-stats">
   
@@ -72,9 +74,9 @@ print_header();
         <th></th>
         <th>Spieler</th>
         <th class="bf-sortable" data-sort="games" title="Nach gespielten Spielen sortieren">Spiele</th>
-        <th class="bf-sortable" data-sort="score" title="Nach Punkten sortieren">Punkte</th>
-        <th class="bf-sortable" data-sort="kills" title="Nach Kills sortieren">Kills</th>
-        <th class="bf-sortable" data-sort="deaths" title="Nach Deaths sortieren">Deaths</th>
+        <th class="bf-sortable" data-sort="score" data-label="Punkte" data-label-per-game="Ø Pkt" data-title="Nach Punkten sortieren" data-title-per-game="Nach Punkten pro Spiel sortieren" title="Nach Punkten sortieren">Punkte</th>
+        <th class="bf-sortable" data-sort="kills" data-label="Kills" data-label-per-game="Ø Kills" data-title="Nach Kills sortieren" data-title-per-game="Nach Kills pro Spiel sortieren" title="Nach Kills sortieren">Kills</th>
+        <th class="bf-sortable" data-sort="deaths" data-label="Deaths" data-label-per-game="Ø Deaths" data-title="Nach Deaths sortieren" data-title-per-game="Nach Deaths pro Spiel sortieren" title="Nach Deaths sortieren">Deaths</th>
         <th class="bf-sortable" data-sort="win_loss" title="Nach Sieg-/Niederlage-Verhältnis sortieren">W/L</th>
     </tr>
     </thead>

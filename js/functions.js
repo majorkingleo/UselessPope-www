@@ -91,6 +91,35 @@ var bf_team_mode = "live";
 var bf_players_data = [];
 var bf_sort_key = "score";
 var bf_sort_dir = -1;
+var bf_per_game = false;
+
+function bf_format_per_game( value )
+{
+    var number = parseFloat( value );
+
+    if( !isFinite( number ) )
+        return "–";
+
+    return number.toFixed( 1 ).replace( ".", "," );
+}
+
+function bf_stat_field( key )
+{
+    if( bf_per_game && ( key === "score" || key === "kills" || key === "deaths" ) )
+        return key + "_per_game";
+
+    return key;
+}
+
+function bf_format_stat_value( player, key )
+{
+    var field = bf_stat_field( key );
+
+    if( field !== key )
+        return bf_format_per_game( player[ field ] );
+
+    return player[ key ];
+}
 
 function bf_sort_value( player, key )
 {
@@ -107,7 +136,7 @@ function bf_sort_value( player, key )
         return wins / losses;
     }
 
-    return parseFloat( player[ key ] ) || 0;
+    return parseFloat( player[ bf_stat_field( key ) ] ) || 0;
 }
 
 function bf_sorted_players()
@@ -166,9 +195,9 @@ function render_bf_players( players )
         tr.append( $( "<td>" ).text( medals[ idx ] || "" ) );
         tr.append( $( "<td>" ).text( player.name ) );
         tr.append( $( "<td>" ).text( player.games ) );
-        tr.append( $( "<td>" ).text( player.score ) );
-        tr.append( $( "<td>" ).text( player.kills ) );
-        tr.append( $( "<td>" ).text( player.deaths ) );
+        tr.append( $( "<td>" ).text( bf_format_stat_value( player, "score" ) ) );
+        tr.append( $( "<td>" ).text( bf_format_stat_value( player, "kills" ) ) );
+        tr.append( $( "<td>" ).text( bf_format_stat_value( player, "deaths" ) ) );
 
         var win_loss = "–";
         if( ( parseInt( player.wins, 10 ) || 0 ) + ( parseInt( player.losses, 10 ) || 0 ) > 0 )
@@ -178,6 +207,30 @@ function render_bf_players( players )
 
         tbody.append( tr );
     } );
+}
+
+function bf_update_stat_headers()
+{
+    $( "#bf-stats th[data-label]" ).each( function() {
+        var th = $( this );
+
+        th.text( th.attr( bf_per_game ? "data-label-per-game" : "data-label" ) );
+        th.attr( "title", th.attr( bf_per_game ? "data-title-per-game" : "data-title" ) );
+    } );
+}
+
+function bf_set_per_game( enabled )
+{
+    bf_per_game = enabled;
+
+    $( "#bf-per-game" )
+        .attr( "aria-pressed", enabled ? "true" : "false" )
+        .find( "span" ).text( enabled ? "Gesamtwerte" : "Werte pro Spiel" );
+
+    bf_update_stat_headers();
+
+    if( $( "#bf-stats-body" ).length )
+        render_bf_players( bf_players_data );
 }
 
 function bf_sort_by( key )
@@ -274,6 +327,10 @@ $(document).ready(function() {
 
             $( "#bf-stats th.bf-sortable" ).click( function() {
                 bf_sort_by( $( this ).data( "sort" ) );
+            } );
+
+            $( "#bf-per-game" ).click( function() {
+                bf_set_per_game( !bf_per_game );
             } );
 
             $("#bf-suggest").click( function() {

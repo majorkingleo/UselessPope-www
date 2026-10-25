@@ -15,7 +15,8 @@ connect_db();
  * Shape (same key -> element id convention as lib/get_uptime.php):
  *   bf_map, bf_hoster, bf_numplayers, bf_tickets, bf_round_time, bf_online
  *   bf_stats_games: number of most recent games the statistics table covers
- *   bf_players: totals per player over the last bf_stats_games games
+ *   bf_players: totals and per-game averages per player over the last
+ *               bf_stats_games games
  *   bf_teams:   array of { title, players } for #bf-teams
  *
  * With ?suggest=1 the teams are a balanced proposal derived from the live
@@ -155,12 +156,20 @@ if( $stats_game_ids ) {
         error_log( "get_bf_stats.php: 6 " . $mysqli->error );
     } else {
         while( $row = $res->fetch_assoc() ) {
+            $games = max( 1, intval( $row["games"] ) );
+            $score = intval( $row["score"] );
+            $kills = intval( $row["kills"] );
+            $deaths = intval( $row["deaths"] );
+
             $stats_players[] = array(
                 "name"   => $row["player_name"],
                 "games"  => intval( $row["games"] ),
-                "score"  => intval( $row["score"] ),
-                "kills"  => intval( $row["kills"] ),
-                "deaths" => intval( $row["deaths"] ),
+                "score"  => $score,
+                "kills"  => $kills,
+                "deaths" => $deaths,
+                "score_per_game"  => $score / $games,
+                "kills_per_game"  => $kills / $games,
+                "deaths_per_game" => $deaths / $games,
                 "wins"   => intval( $row["wins"] ),
                 "losses" => intval( $row["losses"] ),
             );
