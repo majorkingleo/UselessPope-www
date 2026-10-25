@@ -34,6 +34,13 @@ function bf_log_date( $datetime )
 
     return $ts ? date( "Y-m-d H:i", $ts ) : $datetime;
 }
+
+function bf_log_round_time( $seconds )
+{
+    $seconds = max( 0, intval( $seconds ) );
+
+    return sprintf( "%d:%02d", intval( $seconds / 60 ), $seconds % 60 );
+}
 ?>
 
 <body lang="de" id="log" class="bf">
@@ -117,7 +124,7 @@ body#log table.log table.bf-game-stats td:nth-child(2) {
 
 <?php
 $sql = "select g.idx as game_id, g.mapname, g.gametype, g.started_at, g.ended_at, " .
-       "       g.winning_team, g.tickets1, g.tickets2, g.victory_type, " .
+       "       g.winning_team, g.tickets1, g.tickets2, g.round_time, g.victory_type, " .
        "       p.player_name, p.team, p.slot, p.score, p.kills, p.deaths, p.ping " .
        "from BF1942_GAME g " .
        "left join P_BF1942_PLAYER p on p.game_id = g.idx " .
@@ -147,6 +154,7 @@ if( !$res ) {
                 "winning_team" => intval( $row["winning_team"] ),
                 "tickets1"     => intval( $row["tickets1"] ),
                 "tickets2"     => intval( $row["tickets2"] ),
+                "round_time"   => intval( $row["round_time"] ),
                 "victory_type" => $row["victory_type"],
                 "players"      => array(),
             );
@@ -176,9 +184,10 @@ if( !$res ) {
         printf( "  <td>%s</td>\n", htmlspecialchars( bf_log_date( $game["started_at"] ), ENT_QUOTES, 'UTF-8' ) );
         printf( "  <td><details>\n" );
         printf( "    <summary>%s</summary>\n", htmlspecialchars( $map, ENT_QUOTES, 'UTF-8' ) );
-        printf( "    <p class=\"bf-game-meta\">Sieger: %s &middot; Tickets %d : %d &middot; %s</p>\n",
+        printf( "    <p class=\"bf-game-meta\">Sieger: %s &middot; Tickets %d : %d &middot; Rundenzeit %s &middot; %s</p>\n",
                 htmlspecialchars( bf_log_winner_label( $game["winning_team"] ), ENT_QUOTES, 'UTF-8' ),
                 $game["tickets1"], $game["tickets2"],
+                htmlspecialchars( bf_log_round_time( $game["round_time"] ), ENT_QUOTES, 'UTF-8' ),
                 htmlspecialchars( $game["gametype"], ENT_QUOTES, 'UTF-8' ) );
 
         printf( "    <table class=\"bf-game-stats\">\n" );
