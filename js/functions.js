@@ -86,8 +86,44 @@ function fetch_play_data( data )
 
 var bf_team_mode = "live";
 
+// Last received statistics rows and the active column sort. The default
+// matches the server-side order (score descending).
+var bf_players_data = [];
+var bf_sort_key = "score";
+var bf_sort_dir = -1;
+
+function bf_sorted_players()
+{
+    var key = bf_sort_key;
+    var dir = bf_sort_dir;
+
+    return bf_players_data.slice().sort( function( a, b ) {
+        var av = parseInt( a[ key ], 10 ) || 0;
+        var bv = parseInt( b[ key ], 10 ) || 0;
+
+        if( av !== bv )
+            return ( av - bv ) * dir;
+
+        return String( a.name ).localeCompare( String( b.name ) );
+    } );
+}
+
+function bf_update_sort_indicators()
+{
+    $( "#bf-stats th.bf-sortable" ).each( function() {
+        var th = $( this );
+
+        th.removeClass( "bf-sort-asc bf-sort-desc" );
+
+        if( th.data( "sort" ) === bf_sort_key )
+            th.addClass( bf_sort_dir > 0 ? "bf-sort-asc" : "bf-sort-desc" );
+    } );
+}
+
 function render_bf_players( players )
 {
+    bf_players_data = players || [];
+
     var tbody = $( "#bf-stats-body" );
 
     if( !tbody.length )
@@ -95,7 +131,7 @@ function render_bf_players( players )
 
     tbody.empty();
 
-    if( !players || !players.length ) {
+    if( !bf_players_data.length ) {
         tbody.append(
             $( "<tr>" ).append(
                 $( "<td>" ).attr( "colspan", 5 ).text( "Keine Statistik vorhanden." )
@@ -106,7 +142,7 @@ function render_bf_players( players )
 
     var medals = [ "🥇", "🥈", "🥉" ];
 
-    $.each( players, function( idx, player ) {
+    $.each( bf_sorted_players(), function( idx, player ) {
         var tr = $( "<tr>" );
 
         tr.append( $( "<td>" ).text( medals[ idx ] || "" ) );
@@ -117,6 +153,21 @@ function render_bf_players( players )
 
         tbody.append( tr );
     } );
+}
+
+function bf_sort_by( key )
+{
+    if( bf_sort_key === key ) {
+        bf_sort_dir = -bf_sort_dir;
+    } else {
+        bf_sort_key = key;
+        bf_sort_dir = -1;
+    }
+
+    bf_update_sort_indicators();
+
+    if( $( "#bf-stats-body" ).length )
+        render_bf_players( bf_players_data );
 }
 
 function render_bf_teams( teams )
@@ -193,6 +244,12 @@ $(document).ready(function() {
         {
             setInterval( fetch_bf_data, 5000 );
             fetch_bf_data();
+
+            bf_update_sort_indicators();
+
+            $( "#bf-stats th.bf-sortable" ).click( function() {
+                bf_sort_by( $( this ).data( "sort" ) );
+            } );
 
             $("#bf-suggest").click( function() {
                 bf_team_mode = ( bf_team_mode === "live" ) ? "suggest" : "live";

@@ -24,6 +24,10 @@ print_header();
 <main>
   
   <h1>Useless Battlefield</h1>
+  
+  <div id="admin">
+  <a href="index.php"><button><span>Zurück zum Useless Papst</span></button></a>
+  </div>
 
   <h2>Aktuelles Game</h2>
   
@@ -67,9 +71,9 @@ print_header();
     <tr>
         <th></th>
         <th>Spieler</th>
-        <th>Punkte</th>
-        <th>Kills</th>
-        <th>Deaths</th>
+        <th class="bf-sortable" data-sort="score" title="Nach Punkten sortieren">Punkte</th>
+        <th class="bf-sortable" data-sort="kills" title="Nach Kills sortieren">Kills</th>
+        <th class="bf-sortable" data-sort="deaths" title="Nach Deaths sortieren">Deaths</th>
     </tr>
     </thead>
 
@@ -106,7 +110,6 @@ print_header();
   <h2>Sakristei</h2>
   
     <div id="admin">
-      <a href="index.php"><button><span>Zurück zum Useless Papst</span></button></a>
       <a href="common_login/logout.php"><button><span>Exkommunikation einleiten</span></button></a>
       <a href="common_login/admin_myself.php"><button><span>Geheimes Zugriffswort erneuern</span></button></a>
     </div>
