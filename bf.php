@@ -71,6 +71,7 @@ print_header();
     <tr>
         <th></th>
         <th>Spieler</th>
+        <th class="bf-sortable" data-sort="games" title="Nach gespielten Spielen sortieren">Spiele</th>
         <th class="bf-sortable" data-sort="score" title="Nach Punkten sortieren">Punkte</th>
         <th class="bf-sortable" data-sort="kills" title="Nach Kills sortieren">Kills</th>
         <th class="bf-sortable" data-sort="deaths" title="Nach Deaths sortieren">Deaths</th>
@@ -80,7 +81,7 @@ print_header();
 
     <tbody id="bf-stats-body">
     <tr>
-        <td colspan="6">Lade Statistik…</td>
+        <td colspan="7">Lade Statistik…</td>
     </tr>
     </tbody>
     

@@ -152,7 +152,7 @@ function render_bf_players( players )
     if( !bf_players_data.length ) {
         tbody.append(
             $( "<tr>" ).append(
-                $( "<td>" ).attr( "colspan", 6 ).text( "Keine Statistik vorhanden." )
+                $( "<td>" ).attr( "colspan", 7 ).text( "Keine Statistik vorhanden." )
             )
         );
         return;
@@ -165,6 +165,7 @@ function render_bf_players( players )
 
         tr.append( $( "<td>" ).text( medals[ idx ] || "" ) );
         tr.append( $( "<td>" ).text( player.name ) );
+        tr.append( $( "<td>" ).text( player.games ) );
         tr.append( $( "<td>" ).text( player.score ) );
         tr.append( $( "<td>" ).text( player.kills ) );
         tr.append( $( "<td>" ).text( player.deaths ) );
