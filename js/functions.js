@@ -92,14 +92,32 @@ var bf_players_data = [];
 var bf_sort_key = "score";
 var bf_sort_dir = -1;
 
+function bf_sort_value( player, key )
+{
+    if( key === "win_loss" ) {
+        var wins = parseInt( player.wins, 10 ) || 0;
+        var losses = parseInt( player.losses, 10 ) || 0;
+
+        if( wins === 0 && losses === 0 )
+            return 0;
+
+        if( losses === 0 )
+            return Infinity;
+
+        return wins / losses;
+    }
+
+    return parseFloat( player[ key ] ) || 0;
+}
+
 function bf_sorted_players()
 {
     var key = bf_sort_key;
     var dir = bf_sort_dir;
 
     return bf_players_data.slice().sort( function( a, b ) {
-        var av = parseInt( a[ key ], 10 ) || 0;
-        var bv = parseInt( b[ key ], 10 ) || 0;
+        var av = bf_sort_value( a, key );
+        var bv = bf_sort_value( b, key );
 
         if( av !== bv )
             return ( av - bv ) * dir;
@@ -134,7 +152,7 @@ function render_bf_players( players )
     if( !bf_players_data.length ) {
         tbody.append(
             $( "<tr>" ).append(
-                $( "<td>" ).attr( "colspan", 5 ).text( "Keine Statistik vorhanden." )
+                $( "<td>" ).attr( "colspan", 6 ).text( "Keine Statistik vorhanden." )
             )
         );
         return;
@@ -150,6 +168,12 @@ function render_bf_players( players )
         tr.append( $( "<td>" ).text( player.score ) );
         tr.append( $( "<td>" ).text( player.kills ) );
         tr.append( $( "<td>" ).text( player.deaths ) );
+
+        var win_loss = "–";
+        if( ( parseInt( player.wins, 10 ) || 0 ) + ( parseInt( player.losses, 10 ) || 0 ) > 0 )
+            win_loss = ( player.wins || 0 ) + "/" + ( player.losses || 0 );
+
+        tr.append( $( "<td>" ).text( win_loss ) );
 
         tbody.append( tr );
     } );

@@ -142,7 +142,9 @@ $stats_players = array();
 
 if( $stats_game_ids ) {
     $sql = "select player_name, count(*) as games, sum( score ) as score, " .
-           "       sum( kills ) as kills, sum( deaths ) as deaths " .
+           "       sum( kills ) as kills, sum( deaths ) as deaths, " .
+           "       sum( case when winning_team > 0 and team = winning_team then 1 else 0 end ) as wins, " .
+           "       sum( case when winning_team > 0 and team <> winning_team then 1 else 0 end ) as losses " .
            "from P_BF1942_PLAYER " .
            "where game_id in ( " . implode( ", ", $stats_game_ids ) . " ) " .
            "group by player_name";
@@ -159,6 +161,8 @@ if( $stats_game_ids ) {
                 "score"  => intval( $row["score"] ),
                 "kills"  => intval( $row["kills"] ),
                 "deaths" => intval( $row["deaths"] ),
+                "wins"   => intval( $row["wins"] ),
+                "losses" => intval( $row["losses"] ),
             );
         }
     }
