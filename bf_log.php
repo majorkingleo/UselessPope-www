@@ -181,7 +181,7 @@ if( !$res ) {
         $map = $game["mapname"] ? $game["mapname"] : "Unbekannte Karte";
 
         printf( "<tr>\n" );
-        printf( "  <td>%s</td>\n", htmlspecialchars( bf_log_date( $game["started_at"] ), ENT_QUOTES, 'UTF-8' ) );
+        printf( "  <td>%s</td>\n", htmlspecialchars( bf_log_date( $game["ended_at"] ), ENT_QUOTES, 'UTF-8' ) );
         printf( "  <td><details>\n" );
         printf( "    <summary>%s</summary>\n", htmlspecialchars( $map, ENT_QUOTES, 'UTF-8' ) );
         printf( "    <p class=\"bf-game-meta\">Sieger: %s &middot; Tickets %d : %d &middot; Rundenzeit %s &middot; %s</p>\n",
