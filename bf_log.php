@@ -206,6 +206,23 @@ if( !$res ) {
 
 </table>
 
+<script>
+// Keep only one game expanded at a time.
+document.querySelectorAll( "details" ).forEach( function( details ) {
+    details.addEventListener( "toggle", function() {
+        if( !details.open ) {
+            return;
+        }
+
+        document.querySelectorAll( "details[open]" ).forEach( function( other ) {
+            if( other !== details ) {
+                other.open = false;
+            }
+        } );
+    } );
+} );
+</script>
+
 </body>
 
 </html>
