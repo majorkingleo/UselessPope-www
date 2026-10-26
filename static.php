@@ -89,9 +89,71 @@ function bf_static_copy_assets( $target_dir )
     return "";
 }
 
+/*
+ * The archive lives in static/bf-DATUM/, so links back into the live site need
+ * one more level and its scripts sit next to the archived page. This applies to
+ * bf.php as well as to the game log embedded from bf_log.php.
+ */
+function bf_static_rewrite_links( $html )
+{
+    return str_replace(
+        array(
+            'src="../js/psalme.js"',
+            'href="index.php"',
+            'href="bf.php"',
+            'href="static.php"',
+            'href="common_login/',
+        ),
+        array(
+            'src="js/psalme.js"',
+            'href="../../index.php"',
+            'href="../../bf.php"',
+            'href="../../static.php"',
+            'href="../../common_login/',
+        ),
+        $html
+    );
+}
+
+/*
+ * The archive is a snapshot, so the live round section would only show stale
+ * values. Remove "Aktuelles Game" together with its #stats block.
+ */
+function bf_static_remove_live_game( $html )
+{
+    return preg_replace(
+        '#\s*<h2>\s*Aktuelles Game\s*</h2>.*?(?=\s*<h2>)#s',
+        '',
+        $html,
+        1
+    );
+}
+
+/*
+ * The archived page does not need the live team preview boxes in front of the
+ * game log. They belong to the interactive "Team vorschlagen" feature.
+ */
+function bf_static_remove_team_boxes( $html )
+{
+    return preg_replace(
+        '#\s*<div\s+id="bf-teams"[^>]*>.*?(?=\s*<h2>\s*Game Log\s*</h2>)#s',
+        '',
+        $html,
+        1
+    );
+}
+
 function bf_static_build_page( $stats, $log_html )
 {
-    $html = bf_static_render_page( 'bf.php' );
+    $html = bf_static_rewrite_links( bf_static_render_page( 'bf.php' ) );
+    $html = bf_static_remove_live_game( $html );
+    $html = bf_static_remove_team_boxes( $html );
+
+    // The values of the removed live sections are not needed in the archive.
+    foreach( array( "bf_map", "bf_hoster", "bf_numplayers", "bf_tickets",
+                    "bf_round_time", "bf_online", "bf_teams" ) as $key ) {
+        unset( $stats[ $key ] );
+    }
 
     $json = json_encode(
         $stats,
@@ -103,24 +165,6 @@ function bf_static_build_page( $stats, $log_html )
         return null;
     }
 
-    // The archive lives in static/bf-DATUM/, so links back into the live site
-    // need one more level and the footer script now sits next to the page.
-    $html = str_replace(
-        array(
-            'src="../js/psalme.js"',
-            'href="index.php"',
-            'href="bf.php"',
-            'href="common_login/',
-        ),
-        array(
-            'src="js/psalme.js"',
-            'href="../../index.php"',
-            'href="../../bf.php"',
-            'href="../../common_login/',
-        ),
-        $html
-    );
-
     $html = str_replace(
         '</head>',
         '<script>window.BF_STATIC = true; window.BF_STATIC_DATA = ' . $json . ';</script>' . "\n</head>",
@@ -128,16 +172,67 @@ function bf_static_build_page( $stats, $log_html )
     );
 
     if( $log_html !== null ) {
-        $srcdoc = htmlspecialchars( $log_html, ENT_QUOTES | ENT_HTML5, 'UTF-8' );
+        // The game log is embedded as srcdoc so the archive stays a single
+        // file. Its own relative links have to point at the archive too.
+        $srcdoc = htmlspecialchars(
+            bf_static_rewrite_links( $log_html ),
+            ENT_QUOTES | ENT_HTML5,
+            'UTF-8'
+        );
 
-        $html = str_replace(
-            '<iframe src="bf_log.php" title="game log" id="game-log" height="500px"></iframe>',
-            '<iframe title="game log" id="game-log" height="500px" srcdoc="' . $srcdoc . '"></iframe>',
+        // Replace the live iframe regardless of attribute order or any future
+        // attribute changes in bf.php, but keep its existing attributes.
+        $html = preg_replace_callback(
+            '#<iframe\b([^>]*\bid="game-log"[^>]*)>\s*</iframe>#i',
+            function( $matches ) use ( $srcdoc ) {
+                $attributes = preg_replace(
+                    '/\s+(?:src|srcdoc)\s*=\s*(?:"[^"]*"|\'[^\']*\'|[^\s>]+)/i',
+                    '',
+                    $matches[1]
+                );
+
+                return '<iframe' . $attributes . ' srcdoc="' . $srcdoc . '"></iframe>';
+            },
             $html
         );
     }
 
     return $html;
+}
+
+function bf_static_delete_dir( $dir )
+{
+    if( is_link( $dir ) || is_file( $dir ) ) {
+        return @unlink( $dir );
+    }
+
+    if( !is_dir( $dir ) ) {
+        return true;
+    }
+
+    $entries = @scandir( $dir );
+
+    if( $entries === false ) {
+        return false;
+    }
+
+    foreach( $entries as $entry ) {
+        if( $entry === "." || $entry === ".." ) {
+            continue;
+        }
+
+        $path = $dir . "/" . $entry;
+
+        if( is_dir( $path ) && !is_link( $path ) ) {
+            if( !bf_static_delete_dir( $path ) ) {
+                return false;
+            }
+        } else if( !@unlink( $path ) ) {
+            return false;
+        }
+    }
+
+    return @rmdir( $dir );
 }
 
 function bf_static_archives()
@@ -202,12 +297,22 @@ if( isset( $_SERVER["REQUEST_METHOD"] ) && $_SERVER["REQUEST_METHOD"] === "POST"
         $folder_name = "bf-" . date( "Y-m-d" );
         $folder = BF_STATIC_DIR . "/" . $folder_name;
         $path = $folder . "/index.html";
+        $existed = file_exists( $folder ) || is_link( $folder );
 
-        if( !is_dir( $folder ) &&
+        // Always start from a clean folder, so removed files or markup from
+        // older generator versions do not survive in today's archive.
+        if( $existed && !bf_static_delete_dir( $folder ) ) {
+            $error = "Der Ordner static/" . $folder_name . "/ konnte nicht gelöscht werden.";
+        }
+
+        if( $error === "" &&
+            !is_dir( $folder ) &&
             !@mkdir( $folder, 0775, true ) &&
             !is_dir( $folder ) ) {
             $error = "Der Ordner static/" . $folder_name . "/ konnte nicht erstellt werden.";
-        } else {
+        }
+
+        if( $error === "" ) {
             $asset_error = bf_static_copy_assets( $folder );
             $stats = bf_static_render_stats();
 
@@ -218,7 +323,6 @@ if( isset( $_SERVER["REQUEST_METHOD"] ) && $_SERVER["REQUEST_METHOD"] === "POST"
             } else {
                 $log_html = bf_static_render_page( 'bf_log.php' );
                 $html = bf_static_build_page( $stats, $log_html );
-                $existed = file_exists( $path );
 
                 if( $html === null ) {
                     $error = "Die statische Version konnte nicht erzeugt werden.";
@@ -228,7 +332,7 @@ if( isset( $_SERVER["REQUEST_METHOD"] ) && $_SERVER["REQUEST_METHOD"] === "POST"
                     $message = sprintf(
                         '"static/%s/" wurde %s.',
                         $folder_name,
-                        $existed ? "aktualisiert" : "erzeugt"
+                        $existed ? "neu erzeugt" : "erzeugt"
                     );
                 }
             }
