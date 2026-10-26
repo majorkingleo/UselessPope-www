@@ -157,6 +157,29 @@ function bf_static_remove_sakristei( $html )
     );
 }
 
+/*
+ * Embed the game log body directly into the archive instead of loading
+ * bf_log.php through an iframe. Its scoped CSS uses body#log, so that selector
+ * is pointed at the inline wrapper.
+ */
+function bf_static_inline_game_log( $html, $log_html )
+{
+    if( !preg_match( '#<body\b[^>]*>(.*?)</body>#is', $log_html, $matches ) ) {
+        return $html;
+    }
+
+    $log = bf_static_rewrite_links( $matches[1] );
+    $log = str_replace( 'body#log', '#game-log', $log );
+
+    return preg_replace_callback(
+        '#<iframe\b[^>]*\bid="game-log"[^>]*>\s*</iframe>#i',
+        function() use ( $log ) {
+            return '<div id="game-log" class="bf">' . $log . '</div>';
+        },
+        $html
+    );
+}
+
 function bf_static_build_page( $stats, $log_html )
 {
     $html = bf_static_rewrite_links( bf_static_render_page( 'bf.php' ) );
@@ -187,29 +210,7 @@ function bf_static_build_page( $stats, $log_html )
     );
 
     if( $log_html !== null ) {
-        // The game log is embedded as srcdoc so the archive stays a single
-        // file. Its own relative links have to point at the archive too.
-        $srcdoc = htmlspecialchars(
-            bf_static_rewrite_links( $log_html ),
-            ENT_QUOTES | ENT_HTML5,
-            'UTF-8'
-        );
-
-        // Replace the live iframe regardless of attribute order or any future
-        // attribute changes in bf.php, but keep its existing attributes.
-        $html = preg_replace_callback(
-            '#<iframe\b([^>]*\bid="game-log"[^>]*)>\s*</iframe>#i',
-            function( $matches ) use ( $srcdoc ) {
-                $attributes = preg_replace(
-                    '/\s+(?:src|srcdoc)\s*=\s*(?:"[^"]*"|\'[^\']*\'|[^\s>]+)/i',
-                    '',
-                    $matches[1]
-                );
-
-                return '<iframe' . $attributes . ' srcdoc="' . $srcdoc . '"></iframe>';
-            },
-            $html
-        );
+        $html = bf_static_inline_game_log( $html, $log_html );
     }
 
     return $html;
