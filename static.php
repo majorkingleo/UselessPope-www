@@ -143,11 +143,26 @@ function bf_static_remove_team_boxes( $html )
     );
 }
 
+/*
+ * The Sakristei contains login-only actions, so it makes no sense in an
+ * archived snapshot.
+ */
+function bf_static_remove_sakristei( $html )
+{
+    return preg_replace(
+        '#\s*<h2>\s*Sakristei\s*</h2>.*?(?=\s*</main>)#s',
+        '',
+        $html,
+        1
+    );
+}
+
 function bf_static_build_page( $stats, $log_html )
 {
     $html = bf_static_rewrite_links( bf_static_render_page( 'bf.php' ) );
     $html = bf_static_remove_live_game( $html );
     $html = bf_static_remove_team_boxes( $html );
+    $html = bf_static_remove_sakristei( $html );
 
     // The values of the removed live sections are not needed in the archive.
     foreach( array( "bf_map", "bf_hoster", "bf_numplayers", "bf_tickets",
