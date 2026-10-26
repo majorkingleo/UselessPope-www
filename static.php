@@ -250,7 +250,7 @@ print_header();
   <h1>Statische Versionen</h1>
 
   <div id="admin">
-    <a href="bf.php"><button><span>Useless Battlefield</span></button></a>
+    <a href="bf.php"><button><span>Zurück zum Useless Battlefield</span></button></a>
     <a href="index.php"><button><span>Zurück zum Useless Papst</span></button></a>
   </div>
 

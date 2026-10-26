@@ -27,6 +27,7 @@ print_header();
   
   <div id="admin">
   <a href="index.php"><button><span>Zurück zum Useless Papst</span></button></a>
+  <a href="static.php"><button><span>Statische Versionen</span></button></a>
   </div>
 
   <h2>Aktuelles Game</h2>
